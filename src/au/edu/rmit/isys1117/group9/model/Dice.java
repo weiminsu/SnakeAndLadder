@@ -1,3 +1,7 @@
+package au.edu.rmit.isys1117.group9.model;
+
+import au.edu.rmit.isys1117.group9.model.Board;
+
 import java.awt.Color;
 import java.awt.Graphics;
 public class Dice

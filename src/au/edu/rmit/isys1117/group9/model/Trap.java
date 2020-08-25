@@ -1,3 +1,4 @@
+package au.edu.rmit.isys1117.group9.model;
 
 public class Trap {
 	private int location;
