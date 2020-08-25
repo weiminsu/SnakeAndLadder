@@ -1,3 +1,7 @@
+/*
+ * Author:Yingxin Zhang
+ * Student number: s3752708
+ */
 import java.awt.Color;
 import java.awt.Graphics;
 public class Dice
