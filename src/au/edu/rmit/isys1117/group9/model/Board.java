@@ -8,6 +8,7 @@ import java.awt.Graphics;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.
 
 
 public class Board extends JPanel implements Runnable
