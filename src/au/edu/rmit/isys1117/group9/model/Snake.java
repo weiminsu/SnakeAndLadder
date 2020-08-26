@@ -1,3 +1,5 @@
+package au.edu.rmit.isys1117.group9.model;
+
 public class Snake
 {
    private int head;

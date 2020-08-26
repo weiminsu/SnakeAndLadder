@@ -1,3 +1,5 @@
+import au.edu.rmit.isys1117.group9.model.*;
+
 import javax.swing.*;
 import java.util.*;
 
@@ -5,16 +7,16 @@ public class SLGame
 {
 	
    // These arrays and variables are required only for part II
-   Snake snakes[] = new Snake[10];    	// array can store up to 10 Snake objects
-   Ladder ladders[] = new Ladder[10];  	// array can store up to 10 Ladder objects
-   Trap traps[] = new Trap[10];       	// array can store up to 10 Trap objects
+   Snake snakes[] = new Snake[10];    	// array can store up to 10 au.edu.rmit.isys1117.group9.model.Snake objects
+   Ladder ladders[] = new Ladder[10];  	// array can store up to 10 au.edu.rmit.isys1117.group9.model.Ladder objects
+   Trap traps[] = new Trap[10];       	// array can store up to 10 au.edu.rmit.isys1117.group9.model.Trap objects
    String name[] = new String[2];  		// array for storing the names
    int snakesCount = 0;				 
    int laddersCount = 0;	
    int trapsCount = 0;
    
    
-   // Creating a Board, dice and a Scanner objects
+   // Creating a au.edu.rmit.isys1117.group9.model.Board, dice and a Scanner objects
    Board bd = new Board();
    Dice dice = bd.getDice();
    Scanner scan = new Scanner(System.in);
@@ -155,7 +157,7 @@ public class SLGame
       bd.addMessage("a player gets to 100");
       bd.addMessage("Remember to have fun!");   
       bd.addMessage("Danger: Traps,Snakes");    
-      bd.addMessage("Trap: lose 3 moves");
+      bd.addMessage("au.edu.rmit.isys1117.group9.model.Trap: lose 3 moves");
    }
    
    // The very first method to be called

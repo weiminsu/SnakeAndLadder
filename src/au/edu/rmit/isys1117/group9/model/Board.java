@@ -1,3 +1,5 @@
+package au.edu.rmit.isys1117.group9.model;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -49,7 +51,7 @@ public class Board extends JPanel implements Runnable
 	      repaint();
    }
    
-   Dice getDice()
+   public Dice getDice()
    {
       return dice;
    }
