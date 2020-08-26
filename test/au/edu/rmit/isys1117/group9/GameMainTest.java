@@ -28,14 +28,14 @@ public class GameMainTest {
     }
 
     @Test
-    public void testSetUpSuccess(){
+    public void testSetUpSuccess() throws Exception {
         Assert.assertNotNull(admin);
         doNothing().when(admin).setUpBoard();
         Assert.assertTrue(gameMain.setUp());
     }
 
     @Test
-    public void testSetUpFailure(){
+    public void testSetUpFailure() throws Exception {
         Assert.assertNotNull(admin);
         doThrow(new RuntimeException()).when(admin).setUpBoard();
         Assert.assertFalse(gameMain.setUp());

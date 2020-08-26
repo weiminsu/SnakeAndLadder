@@ -1,8 +1,5 @@
 package au.edu.rmit.isys1117.group9.model;
-/*
- * Author:Yingxin Zhang
- * Student number: s3752708
- */
+
 
 import java.awt.*;
 
