@@ -55,7 +55,53 @@ public class Admin {
             int snakeHead = s.getHead();
             int snakeTail = s.getTail();
             if (head == snakeTail || tail == snakeHead) {
-                throw new Exception("The snake heads can not connected others tails");
+                throw new Exception("The snake heads can not connected to others tails");
+
+            }
+        }
+    }
+
+
+    public void putLadders() throws Exception {
+        int head = input.getInt("Please enter the head position", 1, 100);
+        int tail = input.getInt("Please enter the tail position", 1, 100);
+        doAddLadder(head, tail);
+    }
+
+    public void doAddLadder(int top, int bottom) throws Exception {
+        validateLadder(top, bottom);
+        Ladder ladder = new Ladder(top, bottom);
+        ladders.add(ladder);
+        board.add(ladder);
+    }
+
+    public void validateLadder(int top, int bottom) throws Exception {
+
+        if (ladders.size() >= 5) {
+            throw new Exception("Too many ladders");
+
+        }
+        if (top - bottom <= 0 || top - bottom > 30) {
+            throw new Exception("Ladder is too long");
+        }
+
+
+        if (top == 100 || bottom == 1) {
+            throw new Exception("Base cannot be 1 and top cannot be 100");
+
+        }
+        for (Snake s : snakes) {
+            int snakeHead = s.getHead();
+            if (top == snakeHead || bottom == snakeHead) {
+                throw new Exception("The ladder cannot be connected to snakes head");
+
+            }
+        }
+        for (Ladder l : ladders) {
+            int ladderTop = l.getTop();
+            int ladderBase = l.getBottom();
+            if (ladderTop == bottom || ladderBase == top) {
+                throw new Exception("The ladder heads can not connected to others ladders");
 
             }
         }
@@ -66,7 +112,10 @@ public class Admin {
         input.plainMessage("please input 5 snakes");
         for (int i = 0; i < 5; i++) {
             putSnake();
-
+        }
+        input.plainMessage("please input 5 Ladders");
+        for (int i = 0; i < 5; i++) {
+            putLadders();
         }
     }
 }
