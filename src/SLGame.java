@@ -1,7 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
-import java.applet.*;
-import java.awt.event.*;
 import java.util.*;
 
 public class SLGame
