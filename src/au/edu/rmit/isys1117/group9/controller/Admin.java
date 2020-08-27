@@ -12,9 +12,18 @@ public class Admin {
     private ArrayList<Snake> snakes = new ArrayList<Snake>();
     private ArrayList<Ladder> ladders = new ArrayList<Ladder>();
 
+
     public Admin(Board board, IUserInput input) {
         this.board = board;
         this.input = input;
+    }
+
+    public void addHumanPiece() {
+        board.setPiece(1, 1);
+        board.setPiece(1, 1);
+        board.setPiece(1, 1);
+        board.setPiece(1, 1);
+
     }
 
     // Create one new snake
