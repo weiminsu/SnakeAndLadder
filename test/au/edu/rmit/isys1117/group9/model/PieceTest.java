@@ -28,25 +28,32 @@ public class PieceTest {
 
 	@Test
 	public void movePositive() throws BoundaryException {
+		p.setPosition(6);
+		assertEquals("set position to 6", p.getPosition(), 6);
 		p.move(6);
-		assertEquals("Move 6 from 1", p.getPosition(), 7);
+		assertEquals("Move 6 from 1", p.getPosition(), 12);
 	}
 	@Test (expected = BoundaryException.class)
 	public void moveNegative() throws BoundaryException {
+		assertEquals("default piece position is 1", p.getPosition(), 1);
 		p.move(100);
-		assertEquals("Out of boundary", p.getPosition(), 1);
-	}
-	
-	@Test
-	public void paralysePositive() throws BoundaryException {
-		p.paralyse();
-		assertTrue(p.isParalyse());
+		assertEquals("Out of boundary, no action to the piecee", p.getPosition(), 1);
 	}
 	
 	@Test
 	public void paralyseNegative() throws BoundaryException {
-		Piece p1 = new Piece();
-		assertFalse(p1.isParalyse());
+		Piece piece = new Piece();
+		assertFalse("Default pie is unparalysed", piece.isParalyse());
 	}
+	
+	
+	@Test
+	public void paralysePositive() throws BoundaryException {
+		assertFalse("Default pie is unparalysed", p.isParalyse());
+		p.paralyse();
+		assertTrue(p.isParalyse());
+	}
+	
+	
 	
 }
