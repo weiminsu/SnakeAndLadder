@@ -31,7 +31,7 @@ public class PieceTest {
 		p.setPosition(6);
 		assertEquals("set position to 6", p.getPosition(), 6);
 		p.move(6);
-		assertEquals("Move 6 from 1", p.getPosition(), 12);
+		assertEquals("Move 6 from 6", p.getPosition(), 12);
 	}
 	@Test (expected = BoundaryException.class)
 	public void moveNegative() throws BoundaryException {
