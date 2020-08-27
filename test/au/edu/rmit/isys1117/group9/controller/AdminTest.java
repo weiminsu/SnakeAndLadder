@@ -21,7 +21,7 @@ public class AdminTest {
     @Test
     public void testNoMoreFiveSnakes() throws Exception {
         expectedEx.expect(Exception.class);
-        expectedEx.expectMessage("Too many ladders");
+        expectedEx.expectMessage("too many snakes");
         Admin admin = new Admin(new Board(), null);
         admin.doAddSnake(50, 20);
         admin.doAddSnake(31, 1);
