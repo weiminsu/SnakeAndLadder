@@ -39,9 +39,9 @@ public class BoardTest {
 		l1 = Mockito.mock(Ladder.class);
 		l2 = Mockito.mock(Ladder.class);
 		l3 = Mockito.mock(Ladder.class);
-		when(l1.getBase()).thenReturn(10);
-		when(l2.getBase()).thenReturn(60);
-		when(l3.getBase()).thenReturn(60);
+		when(l1.getBottom()).thenReturn(10);
+		when(l2.getBottom()).thenReturn(60);
+		when(l3.getBottom()).thenReturn(60);
 		sn1 = new SnakeGuard(15);
 		sn2 = new SnakeGuard(20);
 		sn3 = new SnakeGuard(20);
