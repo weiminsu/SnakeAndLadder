@@ -50,7 +50,7 @@ public class Board extends JPanel implements Runnable
 	      repaint();
    }
    
-   Dice getDice()
+   public Dice getDice()
    {
       return dice;
    }
