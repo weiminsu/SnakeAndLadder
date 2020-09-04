@@ -7,13 +7,18 @@ public class SLGame
 {
 	
    // These arrays and variables are required only for part II
-   Snake snakes[] = new Snake[10];    	// array can store up to 10 au.edu.rmit.isys1117.group9.model.Snake objects
-   Ladder ladders[] = new Ladder[10];  	// array can store up to 10 au.edu.rmit.isys1117.group9.model.Ladder objects
-   Trap traps[] = new Trap[10];       	// array can store up to 10 au.edu.rmit.isys1117.group9.model.Trap objects
+   //Snake snakes[] = new Snake[10];    	// array can store up to 10 au.edu.rmit.isys1117.group9.model.Snake objects
+   //Ladder ladders[] = new Ladder[10];  	// array can store up to 10 au.edu.rmit.isys1117.group9.model.Ladder objects
+   //Trap traps[] = new Trap[10];       	// array can store up to 10 au.edu.rmit.isys1117.group9.model.Trap objects
    String name[] = new String[2];  		// array for storing the names
    int snakesCount = 0;				 
    int laddersCount = 0;	
    int trapsCount = 0;
+  
+   private List <Snake> snakes;
+   private List <Ladder> ladders;
+   private List<SnakeGuard> snakeGuards;
+   
    
    
    // Creating a au.edu.rmit.isys1117.group9.model.Board, dice and a Scanner objects
@@ -26,11 +31,11 @@ public class SLGame
    // For Part B, modify this code to allow users to specify snake, ladder and trap positions
    // You must enforce all design rules when placing snakes, ladders and traps
    // If the design rules are not violated users must re-enter values
-   public void setup(Board bd)
+   public void setup(Board bd) throws SnakeGuardPlacementException, SnakePlacementException, LadderPlacementException
    {  
 	  int choice = 0;
-	  bd.add(new Trap(25,3));
-	  bd.add(new Trap(95,3));
+	  bd.add(new SnakeGuard(25,3));
+	  bd.add(new SnakeGuard(95,3));
 	  trapsCount = 1;
 	
 	  bd.add(new Snake(92,34));
@@ -96,7 +101,7 @@ public class SLGame
    // For user interaction use the methods getString, getInt and plainMessage
    // For display/erase on the board use bd.addMessage(), bd.clearMessages()
 
-   public void control()
+   public void control() throws SnakeGuardPlacementException, SnakePlacementException, LadderPlacementException
    {   
 	  int numPlayers = 2;
 
@@ -162,7 +167,7 @@ public class SLGame
    
    // The very first method to be called
    // This method constructs a SLGame object and calls its control method 
-   public static void main(String args[])
+   public static void main(String args[]) throws SnakeGuardPlacementException, SnakePlacementException, LadderPlacementException
    {
        SLGame slg = new SLGame();
        

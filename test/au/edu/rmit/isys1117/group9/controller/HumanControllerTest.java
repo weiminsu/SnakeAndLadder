@@ -3,7 +3,9 @@ package au.edu.rmit.isys1117.group9.controller;
 
 import au.edu.rmit.isys1117.group9.model.Board;
 import au.edu.rmit.isys1117.group9.model.Dice;
-import au.edu.rmit.isys1117.group9.model.Trap;
+import au.edu.rmit.isys1117.group9.model.SnakeGuard;
+import au.edu.rmit.isys1117.group9.model.SnakeGuardPlacementException;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,16 +44,16 @@ public class HumanControllerTest {
     }
 
     @Test
-    public void testPlaceSnakeGuardSuccess() {
+    public void testPlaceSnakeGuardSuccess() throws SnakeGuardPlacementException {
         Assert.assertNotNull(board);
-        doNothing().when(board).add(any(Trap.class));
+        doNothing().when(board).add(any(SnakeGuard.class));
         Assert.assertTrue(controller.placeSnakeGuard());
     }
 
     @Test
-    public void testPlaceSnakeGuardFailure() {
+    public void testPlaceSnakeGuardFailure() throws SnakeGuardPlacementException {
         Assert.assertNotNull(board);
-        doThrow(new RuntimeException()).when(board).add(any(Trap.class));
+        doThrow(new RuntimeException()).when(board).add(any(SnakeGuard.class));
         Assert.assertFalse(controller.placeSnakeGuard());
     }
 
