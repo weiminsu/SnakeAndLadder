@@ -1,7 +1,7 @@
 package au.edu.rmit.isys1117.group9.controller;
 import au.edu.rmit.isys1117.group9.model.Board;
 import au.edu.rmit.isys1117.group9.model.Dice;
-import au.edu.rmit.isys1117.group9.model.Trap;
+import au.edu.rmit.isys1117.group9.model.SnakeGuard;
 
 public class HumanController {
     private Board board;
@@ -22,9 +22,9 @@ public class HumanController {
 
     public boolean placeSnakeGuard(){
         // placeholder only, replace with real implementations
-        Trap trap = new Trap(1,2);
+    	SnakeGuard sg = new SnakeGuard(1,2);
         try {
-            board.add(trap);
+            board.add(sg);
         } catch (Exception e){
             return false;
         }
