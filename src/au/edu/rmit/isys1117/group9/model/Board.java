@@ -370,4 +370,16 @@ public class Board extends JPanel implements Runnable
       drawPieces(g);
       dice.draw(g);
    }
+
+    public int getSnakeCounts() {
+        return 0;
+    }
+
+    public int getLadderCounts() {
+       return 0;
+    }
+
+    public int getSnakeGaurdCounts() {
+       return 0;
+    }
 }

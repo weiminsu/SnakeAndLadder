@@ -9,8 +9,11 @@ public class SnakeGuard {
 		this.position = position;
 		this.duration = duration;
 	}
-	
-	public int getPosition() {
+
+    public SnakeGuard(int i) {
+    }
+
+    public int getPosition() {
 		// TODO Auto-generated method stub
 		return position;
 	}
