@@ -1,6 +1,8 @@
 package au.edu.rmit.isys1117.group9.main;
 import javax.swing.*;
 
+import au.edu.rmit.isys1117.group9.controller.Admin;
+import au.edu.rmit.isys1117.group9.controller.IUserInput;
 import au.edu.rmit.isys1117.group9.model.*;
 
 import java.awt.*;
@@ -8,7 +10,7 @@ import java.applet.*;
 import java.awt.event.*;
 import java.util.*;
 
-public class GameMain
+public class GameMain implements IUserInput
 {
 	
    // These arrays and variables are required only for part II
@@ -23,6 +25,7 @@ public class GameMain
    
    // Creating a Board, dice and a Scanner objects
    Board bd = new Board();
+   Admin ad = new Admin(bd, this);
    Dice dice = bd.getDice();
    Scanner scan = new Scanner(System.in);
       
@@ -34,11 +37,10 @@ public class GameMain
    public void setup(Board bd) throws Exception
    {  
 	  int choice = 0;
-	  bd.add(new SnakeGuard(25,3));
-	  bd.add(new SnakeGuard(95,3));
+
 	  trapsCount = 1;
 	
-	  bd.add(new Snake(92,34));
+	  ad.doAddSnake(92, 34);
 	  bd.add(new Snake(62,12));	  
 	  bd.add(new Snake(41,3));  
 	  bd.add(new Snake(99,10));  
@@ -53,7 +55,7 @@ public class GameMain
    }	   
      
    // A method to print a message and to read an int value in the range specified
-   int getInt(String message, int from, int to)
+   public int getInt(String message, int from, int to)
    {
 	   String s;
 	   int n = 0;
@@ -78,7 +80,7 @@ public class GameMain
    }
 
    // A method to print a message and to read a String
-   String getString(String message)
+   public String getString(String message)
    {
 	   String s = (String)JOptionPane.showInputDialog(
 	      bd,  message,  "Customized Dialog",
@@ -87,7 +89,7 @@ public class GameMain
    }   
 
    // A method to print a message
-   void plainMessage(String message)
+   public void plainMessage(String message)
    {
         JOptionPane.showMessageDialog(bd,
 		    message, "A prompt message",

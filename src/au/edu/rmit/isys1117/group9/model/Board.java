@@ -29,7 +29,7 @@ public class Board extends JPanel implements Runnable
    private List<SnakeGuard> snakeGuards;
    
    
-   public void addMessage( String line)
+   public void addMessage(String line)
    {
 	   if (  bCount < 8)
 	   {
@@ -203,7 +203,7 @@ public class Board extends JPanel implements Runnable
    public void setPiece(int piece, int pos)
    {	
 	  
-      pieces.get(piece).setPosition(pos);    
+      pieces.get(piece-1).setPosition(pos);    
       repaint();
    }
 
