@@ -18,13 +18,6 @@ public class Admin {
         this.input = input;
     }
 
-    public void addHumanPiece() {
-        board.setPiece(1, 1);
-        board.setPiece(1, 1);
-        board.setPiece(1, 1);
-        board.setPiece(1, 1);
-
-    }
 
     // Create one new snake
     public void putSnake() throws Exception {
@@ -46,10 +39,13 @@ public class Admin {
             throw new Exception("too many snakes");
 
         }
-        if (head - tail <= 0 || head - tail > 30) {
+        if (head - tail <= 0 ) {
+            throw new Exception("snake's head must be above tail");
+        }
+        if ( head - tail > 30) {
+
             throw new Exception("snake is too long");
         }
-
 
         if (head >= 81 && head <= 100) {
             for (Snake s : snakes) {
