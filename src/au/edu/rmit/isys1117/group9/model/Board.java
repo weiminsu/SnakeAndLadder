@@ -328,7 +328,7 @@ public class Board extends JPanel implements Runnable
            else 
               g.setColor(Color.ORANGE);      
            
-           for (int k=0; k<snakeGuards.size(); k++)            
+           //for (int k=0; k<snakeGuards.size(); k++)            
               g.fillRect(XMARGIN + 40*i,YMARGIN+40*j, 40,40);
 
 	     }
