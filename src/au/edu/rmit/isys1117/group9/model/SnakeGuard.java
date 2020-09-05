@@ -9,17 +9,13 @@ public class SnakeGuard {
 		this.position = position;
 		this.duration = duration;
 	}
-
-    public SnakeGuard(int i) {
-    }
-
-    public int getPosition() {
-		// TODO Auto-generated method stub
+	
+	public int getPosition() {		
 		return position;
 	}
 
-	public int getDuration() {
-		// TODO Auto-generated method stub
+	
+	public int getDuration() {		
 		return duration;
 	}
 

@@ -117,6 +117,8 @@ public class Board extends JPanel implements Runnable
 	   this(2);
    }
 
+   
+   
    public Board(int n)
    {
       if ( n > 4 || n < 2)
@@ -371,15 +373,18 @@ public class Board extends JPanel implements Runnable
       dice.draw(g);
    }
 
-    public int getSnakeCounts() {
-        return 0;
-    }
+public int getSnakeCounts() {
+	
+	return snakes.size();
+}
 
-    public int getLadderCounts() {
-       return 0;
-    }
+public int getLadderCounts() {
+	
+	return ladders.size();
+}
 
-    public int getSnakeGaurdCounts() {
-       return 0;
-    }
+public int getSnakeGaurdCounts() {
+	
+	return snakeGuards.size();
+}
 }
