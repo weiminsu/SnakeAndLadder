@@ -1,4 +1,4 @@
-package main;
+package au.edu.rmit.isys1117.group9.main;
 import javax.swing.*;
 
 import au.edu.rmit.isys1117.group9.model.*;
