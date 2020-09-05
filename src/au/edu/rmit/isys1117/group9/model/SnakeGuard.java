@@ -10,13 +10,11 @@ public class SnakeGuard {
 		this.duration = duration;
 	}
 	
-	public int getPosition() {
-		
+	public int getPosition() {		
 		return position;
 	}
 
-	public int getDuration() {
-		
+	public int getDuration() {		
 		return duration;
 	}
 

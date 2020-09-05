@@ -117,6 +117,7 @@ public class Board extends JPanel implements Runnable
 	   this(2);
    }
 
+   
    public Board(int n)
    {
       if ( n > 4 || n < 2)
