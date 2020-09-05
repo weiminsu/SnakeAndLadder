@@ -91,8 +91,10 @@ public class Board extends JPanel implements Runnable
 		}
 		
 	}
-   
-   
+
+	public void add (Piece p) throws Exception {
+
+	}
    
    public void add (SnakeGuard sg) throws SnakeGuardPlacementException {
 		

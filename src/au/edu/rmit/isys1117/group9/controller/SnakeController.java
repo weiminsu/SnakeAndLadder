@@ -9,7 +9,7 @@ public SnakeController(Board board){
         this.board = board;
     }
 
-    public boolean SnakeMove() throws IllegalArgumentException {
+    public boolean move() throws IllegalArgumentException {
 
         return true;
     }

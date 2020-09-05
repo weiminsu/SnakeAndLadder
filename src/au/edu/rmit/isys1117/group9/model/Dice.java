@@ -66,7 +66,6 @@ public class Dice {
         } else {
             n = 6;
         }
-        sl.repaint();
         return n;
     }
 

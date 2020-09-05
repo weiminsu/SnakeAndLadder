@@ -1,11 +1,15 @@
 package au.edu.rmit.isys1117.group9.controller;
 
 
+<<<<<<< HEAD
 import au.edu.rmit.isys1117.group9.model.Board;
 import au.edu.rmit.isys1117.group9.model.Dice;
 import au.edu.rmit.isys1117.group9.model.SnakeGuard;
 import au.edu.rmit.isys1117.group9.model.SnakeGuardPlacementException;
 
+=======
+import au.edu.rmit.isys1117.group9.model.*;
+>>>>>>> Fix tests
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,16 +62,16 @@ public class HumanControllerTest {
     }
 
     @Test
-    public void testMoveWithoutDiceSuccess() {
+    public void testMoveWithoutDiceSuccess() throws Exception {
         Assert.assertNotNull(board);
-        doNothing().when(board).setPiece(anyInt(),anyInt());
+        doNothing().when(board).add(any(Piece.class));
         Assert.assertTrue(controller.moveWithoutRollDice());
     }
 
     @Test
-    public void testMoveWithoutDiceFailure() {
+    public void testMoveWithoutDiceFailure() throws Exception {
         Assert.assertNotNull(board);
-        doThrow(new RuntimeException()).when(board).setPiece(anyInt(),anyInt());
+        doThrow(new RuntimeException()).when(board).add(any(Piece.class));
         Assert.assertFalse(controller.moveWithoutRollDice());
     }
 }
