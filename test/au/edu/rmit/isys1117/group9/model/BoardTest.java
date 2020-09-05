@@ -29,6 +29,7 @@ public class BoardTest {
 	@Before
 	public void setUp() throws Exception {
 		
+		
 		b = new Board();
 		s1 = Mockito.mock(Snake.class);
 		s2 = Mockito.mock(Snake.class);
@@ -42,9 +43,9 @@ public class BoardTest {
 		when(l1.getBottom()).thenReturn(10);
 		when(l2.getBottom()).thenReturn(60);
 		when(l3.getBottom()).thenReturn(60);
-		sn1 = new SnakeGuard(15);
-		sn2 = new SnakeGuard(20);
-		sn3 = new SnakeGuard(20);
+		sn1 = new SnakeGuard(15, 0);
+		sn2 = new SnakeGuard(20, 0);
+		sn3 = new SnakeGuard(20, 0);
 	}
 
 	@After
