@@ -14,6 +14,7 @@ public class SnakeGuard {
 		return position;
 	}
 
+	
 	public int getDuration() {		
 		return duration;
 	}

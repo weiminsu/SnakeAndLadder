@@ -29,6 +29,7 @@ public class BoardTest {
 	@Before
 	public void setUp() throws Exception {
 		
+		
 		b = new Board();
 		s1 = Mockito.mock(Snake.class);
 		s2 = Mockito.mock(Snake.class);
