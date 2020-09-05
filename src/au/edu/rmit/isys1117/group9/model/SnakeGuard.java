@@ -11,12 +11,12 @@ public class SnakeGuard {
 	}
 	
 	public int getPosition() {
-		// TODO Auto-generated method stub
+		
 		return position;
 	}
 
 	public int getDuration() {
-		// TODO Auto-generated method stub
+		
 		return duration;
 	}
 

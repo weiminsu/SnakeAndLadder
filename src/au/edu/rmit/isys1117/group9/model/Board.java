@@ -372,17 +372,17 @@ public class Board extends JPanel implements Runnable
    }
 
 public int getSnakeCounts() {
-	// TODO Auto-generated method stub
+	
 	return snakes.size();
 }
 
 public int getLadderCounts() {
-	// TODO Auto-generated method stub
+	
 	return ladders.size();
 }
 
 public int getSnakeGaurdCounts() {
-	// TODO Auto-generated method stub
+	
 	return snakeGuards.size();
 }
 }
