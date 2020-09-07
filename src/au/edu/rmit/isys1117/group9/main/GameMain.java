@@ -40,7 +40,7 @@ public class GameMain implements IUserInput
 
 	  trapsCount = 1;
 	
-	  ad.doAddSnake(92, 34);
+	  bd.add(new Snake(92,34));	
 	  bd.add(new Snake(62,12));	  
 	  bd.add(new Snake(41,3));  
 	  bd.add(new Snake(99,10));  
