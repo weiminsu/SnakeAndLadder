@@ -27,10 +27,12 @@ public class Admin {
     }
 
     public void doAddSnake(int head, int tail) throws Exception {
-        validateSnake(head, tail);
-        Snake snake = new Snake(head, tail);
-        snakes.add(snake);
-        board.add(snake);
+
+    		validateSnake(head, tail);
+            Snake snake = new Snake(head, tail);
+            snakes.add(snake);
+            board.add(snake);
+		    	
     }
 
     public void validateSnake(int head, int tail) throws Exception {
