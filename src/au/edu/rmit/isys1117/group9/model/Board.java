@@ -92,8 +92,6 @@ public class Board extends JPanel implements Runnable
 		
 	}
    
-   
-   
    public void add (SnakeGuard sg) throws SnakeGuardPlacementException {
 		
 		if (snakeGuards.size() < 10) {
@@ -111,14 +109,11 @@ public class Board extends JPanel implements Runnable
 		
 	} 
    
-   
    public Board()
    {
 	   this(2);
    }
-
-   
-   
+  
    public Board(int n)
    {
       if ( n > 4 || n < 2)
@@ -167,7 +162,6 @@ public class Board extends JPanel implements Runnable
      }
    }
 
-
    public void drawPieces(Graphics g)
    {
       if (pieces.size() > 0)
@@ -198,13 +192,6 @@ public class Board extends JPanel implements Runnable
          g.setColor(Color.BLACK);   
          g.drawString("4",(int)getX(pieces.get(3).getPosition())+15, getY(pieces.get(3).getPosition())+25); 
       }
-   }
-
-   public void setPiece(int piece, int pos)
-   {	
-	  
-      pieces.get(piece-1).setPosition(pos);    
-      repaint();
    }
 
 
@@ -252,6 +239,7 @@ public class Board extends JPanel implements Runnable
       else
 	  return  XMARGIN  + 370 - pos%10 * 40;
    }
+   
    private int getY(int pos)
    {
       pos--;
@@ -317,7 +305,6 @@ public class Board extends JPanel implements Runnable
       }   
    }
 
-
    public void paintComponent(Graphics g) {
       super.paintComponent(g);
       for (int i=0; i<10; i++)
@@ -373,18 +360,56 @@ public class Board extends JPanel implements Runnable
       dice.draw(g);
    }
 
-public int getSnakeCounts() {
+   public int getSnakeCounts() {
 	
-	return snakes.size();
-}
+	   return snakes.size();
+   }
 
-public int getLadderCounts() {
+   public int getLadderCounts() {
 	
-	return ladders.size();
-}
+	   return ladders.size();
+   }
 
-public int getSnakeGaurdCounts() {
+   public int getSnakeGaurdCounts() {
 	
-	return snakeGuards.size();
-}
+	   return snakeGuards.size();
+   }
+
+   
+   public void setPiece(int piece, int pos)
+   {	
+	  
+      pieces.get(piece-1).setPosition(pos);    
+      repaint();
+   }
+   
+   
+   public void setSnake(int head, int pos) {
+   
+	   for (Snake i : snakes) {
+		   
+		   if (i.getHead() == head) {
+		   
+			   i.setPosition(pos);
+   
+		   }		   
+	   }
+	   
+	   repaint();
+	   
+   }
+   
+   public void test() {
+	   
+   }
+   
+
+
+
+
+
+
+
+
+
 }
