@@ -11,7 +11,6 @@ public class SLGame {
     // This method constructs a SLGame object and calls its control method
     public static void main(String args[]) throws SnakeGuardPlacementException, SnakePlacementException, LadderPlacementException {
         GameMain gameMain=new GameMain();
-
         gameMain.startGame();
     }
 

@@ -58,7 +58,7 @@ public class GameMain implements IUserInput{
     }
 
     public boolean play(){
-        // placehoder;
+        // placeHolder;
         return true;
     }
 
