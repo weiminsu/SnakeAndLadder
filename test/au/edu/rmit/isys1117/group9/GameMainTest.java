@@ -42,20 +42,20 @@ public class GameMainTest {
     }
 
     @Test
-    public void testPlaySuccess(){
+    public void testPlaySuccess() throws Exception {
         Assert.assertNotNull(humanController);
         Assert.assertNotNull(snakeController);
-        doReturn(true).when(humanController).moveWithoutRollDice();
+        doReturn(true).when(humanController).move(anyInt(), anyInt());
         doReturn(true).when(humanController).placeSnakeGuard();
-        doReturn(true).when(humanController).rollDiceAndMove();
+        doReturn(true).when(humanController).moveTo(anyInt(), anyInt());
         Assert.assertTrue(gameMain.play());
     }
 
     @Test
-    public void testPlayFailure(){
+    public void testPlayFailure() throws Exception {
         Assert.assertNotNull(humanController);
         Assert.assertNotNull(snakeController);
-        doReturn(false).when(humanController).moveWithoutRollDice();
+        doReturn(false).when(humanController).moveTo(anyInt(), anyInt());
         Assert.assertFalse(gameMain.play());
     }
 }

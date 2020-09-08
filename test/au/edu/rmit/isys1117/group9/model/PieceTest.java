@@ -1,6 +1,7 @@
 package au.edu.rmit.isys1117.group9.model;
 import static org.junit.Assert.*;
 
+import au.edu.rmit.isys1117.group9.exception.BoundaryException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

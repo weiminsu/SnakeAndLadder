@@ -1,17 +1,17 @@
 import au.edu.rmit.isys1117.group9.GameMain;
-import au.edu.rmit.isys1117.group9.model.LadderPlacementException;
-import au.edu.rmit.isys1117.group9.model.SnakeGuardPlacementException;
-import au.edu.rmit.isys1117.group9.model.SnakePlacementException;
-
-import javax.swing.*;
+import au.edu.rmit.isys1117.group9.exception.InvalidInputException;
+import au.edu.rmit.isys1117.group9.exception.LadderPlacementException;
+import au.edu.rmit.isys1117.group9.exception.SnakeGuardPlacementException;
+import au.edu.rmit.isys1117.group9.exception.SnakePlacementException;
+import au.edu.rmit.isys1117.group9.model.Board;
 
 public class SLGame {
 
     // The very first method to be called
     // This method constructs a SLGame object and calls its control method
-    public static void main(String args[]) throws SnakeGuardPlacementException, SnakePlacementException, LadderPlacementException {
+    public static void main(String args[]) throws InvalidInputException, SnakeGuardPlacementException, SnakePlacementException, LadderPlacementException {
         GameMain gameMain=new GameMain();
-
+        gameMain.enableTestMode();
         gameMain.startGame();
     }
 

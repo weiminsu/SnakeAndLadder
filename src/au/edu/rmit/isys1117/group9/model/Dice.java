@@ -66,6 +66,7 @@ public class Dice {
         } else {
             n = 6;
         }
+        draw(sl.getGraphics());
         return n;
     }
 

@@ -1,4 +1,10 @@
 package au.edu.rmit.isys1117.group9.model;
+import au.edu.rmit.isys1117.group9.exception.BoundaryException;
+import au.edu.rmit.isys1117.group9.exception.LadderPlacementException;
+import au.edu.rmit.isys1117.group9.exception.NoSuchPieceException;
+import au.edu.rmit.isys1117.group9.exception.SnakeGuardPlacementException;
+import au.edu.rmit.isys1117.group9.exception.SnakePlacementException;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -93,7 +99,7 @@ public class Board extends JPanel implements Runnable
 	}
 
 	public void add (Piece p) throws Exception {
-
+       pieces.add(p);
 	}
    
    public void add (SnakeGuard sg) throws SnakeGuardPlacementException {
@@ -162,7 +168,7 @@ public class Board extends JPanel implements Runnable
           Thread.sleep(1000);
         }
         catch (Exception e) {}
-      factor += inc;; 
+      factor += inc;
       if (factor > 0.5 || factor < -0.5)
          inc = -inc;
       repaint();
@@ -202,11 +208,28 @@ public class Board extends JPanel implements Runnable
       }
    }
 
-   public void setPiece(int piece, int pos)
-   {	
-	  
-      pieces.get(piece).setPosition(pos);    
-      repaint();
+   public Piece getPiece(int piece) {
+       if (piece<0 || piece >= pieces.size())
+           return null;
+       return pieces.get(piece);
+   }
+
+   public void movePiece(int piece, int steps) throws BoundaryException, NoSuchPieceException {
+       if (piece<0 || piece >= pieces.size())
+           throw new NoSuchPieceException();
+       Piece p = pieces.get(piece);
+       p.move(steps);
+       addMessage("P" + piece + " moved to " + p.getPosition());
+       repaint();
+   }
+
+   public void movePieceTo(int piece, int destination) throws BoundaryException, NoSuchPieceException {
+       if (piece<0 || piece >= pieces.size())
+           throw new NoSuchPieceException();
+       Piece p = pieces.get(piece);
+       p.move(destination-p.getPosition());
+       addMessage("P" + piece + " moved to " + p.getPosition());
+       repaint();
    }
 
 
@@ -389,4 +412,8 @@ public int getSnakeGaurdCounts() {
 	
 	return snakeGuards.size();
 }
+
+    public int getPieceCounts() {
+        return pieces.size();
+    }
 }

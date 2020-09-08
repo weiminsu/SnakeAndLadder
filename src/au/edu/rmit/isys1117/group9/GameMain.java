@@ -4,6 +4,8 @@ import au.edu.rmit.isys1117.group9.controller.Admin;
 import au.edu.rmit.isys1117.group9.controller.HumanController;
 import au.edu.rmit.isys1117.group9.controller.IUserInput;
 import au.edu.rmit.isys1117.group9.controller.SnakeController;
+import au.edu.rmit.isys1117.group9.controller.UIWrapper;
+import au.edu.rmit.isys1117.group9.exception.InvalidInputException;
 import au.edu.rmit.isys1117.group9.model.Board;
 
 import javax.swing.*;
@@ -14,52 +16,88 @@ public class GameMain implements IUserInput{
     private SnakeController snakeController;
     private Admin admin;
     private int stage;
-    private int steps;
+    private int turns;
+    private UIWrapper uiWrapper;
+    private boolean testMode;
 
     public GameMain(){
         this.board=new Board(4);
         this.humanController=new HumanController(this.board);
         this.snakeController=new SnakeController(this.board);
-        this.admin=new Admin(this.board, this) ;{
-
-        }
+        this.admin=new Admin(this.board, this);
+        stage = 1;
+        turns = 0;
+        uiWrapper = new UIWrapper(board);
+        testMode = false;
     }
 
-    public void startGame(){
+    public void enableTestMode() {
+        testMode = true;
+    }
+
+    public void startGame() throws InvalidInputException {
         setUp();
+        play();
     }
 
     public boolean setUp() {
-        // placeholder
-        for (int i = 0; i < 5; i++) {
-            plainMessage("Admin please put snake"+(i+1));
-            while(true){
-                try{
-                    admin.putSnake();
-                    break;
-                }catch (Exception e){
-                    plainMessage(e.getMessage());
+        if (!testMode) {
+            for (int i = 0; i < 5; i++) {
+                plainMessage("Admin please put snake" + (i + 1));
+                while (true) {
+                    try {
+                        admin.putSnake();
+                        break;
+                    } catch (Exception e) {
+                        plainMessage(e.getMessage());
+                    }
+                }
+            }
+            for (int i = 0; i < 5; i++) {
+                plainMessage("Admin please put ladder" + (i + 1));
+                while (true) {
+                    try {
+                        admin.putLadders();
+                        break;
+                    } catch (Exception e) {
+                        plainMessage(e.getMessage());
+                    }
                 }
             }
         }
-        for (int i = 0; i < 5; i++) {
-            plainMessage("Admin please put ladder"+(i+1));
-            while(true){
-                try{
-                    admin.putLadders();
-                    break;
-                }catch (Exception e){
-                    plainMessage(e.getMessage());
-                }
-            }
-        }
-
+        stage++;
         return true;
     }
 
-    public boolean play(){
-        // placehoder;
-        return true;
+    public boolean play() throws InvalidInputException {
+        while(true) {
+            // Human playing on even turns and snake playing on odd turns
+            if (turns%2 == 0) {
+                if (stage == 2) {
+                    if (!humanController.placeSnakeGuard()) {
+                        int n = humanController.rollDice();
+                        int piece = humanController.choosePiece();
+                        humanController.move(piece, n);
+                    }
+
+                } else if (stage == 3) {
+                    int piece = humanController.choosePiece();
+                    int destination = humanController.chooseDestination();
+                    humanController.moveTo(piece, destination);
+                }
+            } else {
+                // placeholder
+                snakeController.move();
+            }
+
+            // after a turn, see if any game rule is triggered, for example, if a human piece is paralyzed, or if a human piece is
+            // moving up with a ladder, if the game should proceed to next stage, or if there is a winner of the game and so on
+            applyGameRules();
+        }
+    }
+
+    public void applyGameRules() {
+
     }
 
     // A method to print a message and to read an int value in the range specified

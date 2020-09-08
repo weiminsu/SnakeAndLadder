@@ -1,4 +1,7 @@
 package au.edu.rmit.isys1117.group9.model;
+import au.edu.rmit.isys1117.group9.exception.LadderPlacementException;
+import au.edu.rmit.isys1117.group9.exception.SnakeGuardPlacementException;
+import au.edu.rmit.isys1117.group9.exception.SnakePlacementException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -71,7 +74,7 @@ public class BoardTest {
 	}
 	
 	@Test
-	public void addLadderPositive() throws LadderPlacementException  {
+	public void addLadderPositive() throws LadderPlacementException {
 		assertEquals("An empty board", b.getLadderCounts(), 0);
 		b.add(l1);
 		assertEquals("Add 1st ladder with base 10", b.getLadderCounts(), 1);

@@ -1,5 +1,7 @@
 package au.edu.rmit.isys1117.group9.model;
 
+import au.edu.rmit.isys1117.group9.exception.BoundaryException;
+
 public class Piece {
 
 	private int position;
@@ -20,7 +22,7 @@ public class Piece {
 	
 	public void move(int n) throws BoundaryException {
 		
-		if ((position + n) > 100) {
+		if ((position + n) > 100 || (position + n) < 0) {
 			throw new BoundaryException();
 		} else {
 			position += n;
