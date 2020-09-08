@@ -7,8 +7,9 @@ import au.edu.rmit.isys1117.group9.controller.SnakeController;
 import au.edu.rmit.isys1117.group9.model.Board;
 
 import javax.swing.*;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class GameMain implements IUserInput{
+public class GameMain implements IUserInput {
     private HumanController humanController;
     private Board board;
     private SnakeController snakeController;
@@ -16,40 +17,48 @@ public class GameMain implements IUserInput{
     private int stage;
     private int steps;
 
-    public GameMain(){
-        this.board=new Board(4);
-        this.humanController=new HumanController(this.board);
-        this.snakeController=new SnakeController(this.board);
-        this.admin=new Admin(this.board, this) ;{
+    public GameMain() {
+        this.board = new Board(4);
+        this.humanController = new HumanController(this.board);
+        this.snakeController = new SnakeController(this.board);
+        this.admin = new Admin(this.board, this);
+        {
 
         }
     }
 
-    public void startGame(){
+    public void startGame() {
         setUp();
     }
 
     public boolean setUp() {
         // placeholder
         for (int i = 0; i < 5; i++) {
-            plainMessage("Admin please put snake"+(i+1));
-            while(true){
-                try{
-                    admin.putSnake();
+            //plainMessage("Admin please put snake"+(i+1));
+            while (true) {
+                try {
+                    int head = ThreadLocalRandom.current().nextInt(0, 101);
+                    int length = ThreadLocalRandom.current().nextInt(1, 31);
+                    int tail = head - length;
+                    admin.doAddSnake(head, tail);
+                    //admin.putSnake();
                     break;
-                }catch (Exception e){
-                    plainMessage(e.getMessage());
+                } catch (Exception e) {
+                    //plainMessage(e.getMessage());
                 }
             }
         }
         for (int i = 0; i < 5; i++) {
-            plainMessage("Admin please put ladder"+(i+1));
-            while(true){
-                try{
-                    admin.putLadders();
+//            plainMessage("Admin please put ladder" + (i + 1));
+            while (true) {
+                try {
+                    int top = ThreadLocalRandom.current().nextInt(0, 100);
+                    int length = ThreadLocalRandom.current().nextInt(1, 31);
+                    int bottom = top - length;
+                    admin.doAddLadder(top, bottom);
                     break;
-                }catch (Exception e){
-                    plainMessage(e.getMessage());
+                } catch (Exception e) {
+//                    plainMessage(e.getMessage());
                 }
             }
         }
@@ -57,7 +66,7 @@ public class GameMain implements IUserInput{
         return true;
     }
 
-    public boolean play(){
+    public boolean play() {
         // placeHolder;
         return true;
     }

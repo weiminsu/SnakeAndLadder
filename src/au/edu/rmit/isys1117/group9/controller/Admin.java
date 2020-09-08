@@ -37,6 +37,10 @@ public class Admin {
 
     public void validateSnake(int head, int tail) throws Exception {
 
+        if (head > 100 || tail < 0) {
+            throw new Exception("Snake out of board");
+        }
+
         if (snakes.size() >= 5) {
             throw new Exception("too many snakes");
 
@@ -83,6 +87,10 @@ public class Admin {
     }
 
     public void validateLadder(int top, int bottom) throws Exception {
+
+        if (top > 100 || bottom < 0) {
+            throw new Exception("Ladder out of board");
+        }
 
         if (ladders.size() >= 5) {
             throw new Exception("Too many ladders");
