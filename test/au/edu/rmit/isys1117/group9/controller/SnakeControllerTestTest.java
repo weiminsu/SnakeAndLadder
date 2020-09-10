@@ -2,14 +2,10 @@ package au.edu.rmit.isys1117.group9.controller;
 
 import au.edu.rmit.isys1117.group9.model.Board;
 import au.edu.rmit.isys1117.group9.model.Snake;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.Before;
-import org.mockito.Mockito;
 
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class SnakeControllerTest {
+class SnakeControllerTestTest {
     @Before
     public void setUp() {
         board = Mockito.mock(Board.class);
@@ -33,6 +29,4 @@ public class SnakeControllerTest {
 
     }
 
-
 }
-
