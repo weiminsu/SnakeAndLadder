@@ -132,7 +132,7 @@ public class GameMain implements IUserInput
       if ( p1Location == 7 )
       {
     	  p1Location = 49; // going up the first  ladder
-          plainMessage(name1 + ": goin up a ladder to " + p1Location);
+          plainMessage(name1 + ": going up a ladder to " + p1Location);
           bd.setPiece(1, p1Location);
       } 
     	  
