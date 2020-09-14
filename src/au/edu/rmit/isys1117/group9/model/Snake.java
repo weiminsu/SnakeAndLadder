@@ -11,7 +11,11 @@ public class Snake
    }
    public int getHead() { return head; }
    public int getTail() { return tail; } 
-   public void setPosition(int pos) {
+   public void setHeadPosition(int pos) {
 	   head = pos;
+   }
+   
+   public void setTailPosition(int pos) {
+	   tail = pos;
    }
 }

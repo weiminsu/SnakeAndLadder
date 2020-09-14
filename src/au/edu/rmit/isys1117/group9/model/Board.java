@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 
 public class Board extends JPanel implements Runnable
 {
-   private static JFrame frame = new JFrame("Introduction to Programming Assignment 2");
+   private static JFrame frame = new JFrame("SEF Assignment");
    private double factor = 0.2;
    private int XMARGIN = 20;
    private int YMARGIN = 20;
@@ -27,6 +27,12 @@ public class Board extends JPanel implements Runnable
    private List <Ladder> ladders;
 
    private List<SnakeGuard> snakeGuards;
+   
+   
+   public List<Snake> getSnakes(){
+	   return snakes;
+	   
+   }
    
    
    public void addMessage(String line)
@@ -94,7 +100,7 @@ public class Board extends JPanel implements Runnable
    
    public void add (SnakeGuard sg) throws SnakeGuardPlacementException {
 		
-		if (snakeGuards.size() < 10) {
+		if (snakeGuards.size() < 4) {
 			
 			for (SnakeGuard i : snakeGuards) {
 				if (sg.getPosition() == i.getPosition()) {
@@ -389,9 +395,11 @@ public class Board extends JPanel implements Runnable
 	   for (Snake i : snakes) {
 		   
 		   if (i.getHead() == head) {
-		   
-			   i.setPosition(pos);
-   
+			   int length =  i.getHead() - i.getTail();
+			   
+			   i.setHeadPosition(pos);
+			   i.setTailPosition(pos - length);
+			   
 		   }		   
 	   }
 	   
@@ -399,17 +407,26 @@ public class Board extends JPanel implements Runnable
 	   
    }
    
-   public void test() {
-	   
-   }
    
+   
+  
+   public void destroyPiece(int piece) {
+	   
+	   pieces.remove(piece - 1);
+	   repaint();
+   }
 
-
-
-
-
-
-
+   
+   public void destroySnake(int head) {
+	   
+	   for (Snake i : snakes) {
+		   if (i.getHead() == head) {
+			   snakes.remove(i);
+			   break;
+		   }	   
+	   }	   
+	   repaint();	   
+   }
 
 
 }
