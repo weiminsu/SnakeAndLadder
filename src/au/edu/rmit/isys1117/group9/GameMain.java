@@ -9,8 +9,9 @@ import au.edu.rmit.isys1117.group9.exception.InvalidInputException;
 import au.edu.rmit.isys1117.group9.model.Board;
 
 import javax.swing.*;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class GameMain implements IUserInput{
+public class GameMain implements IUserInput {
     private HumanController humanController;
     private Board board;
     private SnakeController snakeController;
@@ -62,6 +63,29 @@ public class GameMain implements IUserInput{
                     } catch (Exception e) {
                         plainMessage(e.getMessage());
                     }
+                }
+            }
+        } else {
+            // placeholder
+            for (int i = 0; i < 5; i++) {
+                //plainMessage("Admin please put snake"+(i+1));
+                try {
+                    int head = ThreadLocalRandom.current().nextInt(0, 101);
+                    int length = ThreadLocalRandom.current().nextInt(1, 31);
+                    int tail = head - length;
+                    admin.doAddSnake(head, tail);
+                    //admin.putSnake();
+                } catch (Exception e) {
+                    //plainMessage(e.getMessage());
+                }
+            }
+            for (int i = 0; i < 5; i++) {
+                try {
+                    int top = ThreadLocalRandom.current().nextInt(0, 100);
+                    int length = ThreadLocalRandom.current().nextInt(1, 31);
+                    int bottom = top - length;
+                    admin.doAddLadder(top, bottom);
+                } catch (Exception e) {
                 }
             }
         }
