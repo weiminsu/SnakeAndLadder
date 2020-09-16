@@ -98,10 +98,13 @@ public class GameMain implements IUserInput {
             // Human playing on even turns and snake playing on odd turns
             if (turns%2 == 0) {
                 if (stage == 2) {
-                    if (!humanController.placeSnakeGuard()) {
+                    int snakeGuardPos = humanController.chooseSnakeGuardLocation();
+                    if (snakeGuardPos == -1) {
                         int n = humanController.rollDice();
                         int piece = humanController.choosePiece();
                         humanController.move(piece, n);
+                    } else {
+                        humanController.placeSnakeGuard(snakeGuardPos);
                     }
 
                 } else if (stage == 3) {

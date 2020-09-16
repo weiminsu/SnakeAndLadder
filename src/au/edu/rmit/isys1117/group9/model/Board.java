@@ -31,8 +31,9 @@ public class Board extends JPanel implements Runnable
    private List <Piece> pieces;
    private List <Snake> snakes;
    private List <Ladder> ladders;
-
    private List<SnakeGuard> snakeGuards;
+
+   private List<Square> squares; // so that we could conveniently lookup objects on a specific location
    
    
    public void addMessage(String line)
@@ -73,7 +74,7 @@ public class Board extends JPanel implements Runnable
 				}
 			}	
 			snakes.add(s);
-			
+			squares.get(s.getHead()).setSnake(s);
 		} else {
 			throw new SnakePlacementException();
 		}
@@ -91,7 +92,7 @@ public class Board extends JPanel implements Runnable
 				}
 			}	
 			ladders.add(l);
-			
+			squares.get(l.getBottom()).setLadder(l);
 		} else {
 			throw new LadderPlacementException();
 		}
@@ -100,6 +101,7 @@ public class Board extends JPanel implements Runnable
 
 	public void add (Piece p) throws Exception {
        pieces.add(p);
+       squares.get(p.getPosition()).addPiece(p);
 	}
    
    public void add (SnakeGuard sg) throws SnakeGuardPlacementException {
@@ -112,7 +114,7 @@ public class Board extends JPanel implements Runnable
 				}
 			}	
 			snakeGuards.add(sg);
-			
+			squares.get(sg.getPosition()).setSnakeGuard(sg);
 		} else {
 			throw new SnakeGuardPlacementException();
 		}
@@ -146,10 +148,15 @@ public class Board extends JPanel implements Runnable
       ladders = new ArrayList<Ladder>();
       pieces = new ArrayList<Piece>();
       snakeGuards = new ArrayList<SnakeGuard>();
+      squares = new ArrayList<>();
+      for (int i=0; i<100; i++) {
+          squares.add(new Square(i));
+      }
       
       for (int i = 0; i < n; i++) {
-		pieces.add(new Piece());
-    	  
+          Piece p = new Piece();
+          pieces.add(p);
+          squares.get(0).addPiece(p);
       }
       
 
@@ -214,7 +221,11 @@ public class Board extends JPanel implements Runnable
        if (piece<0 || piece >= pieces.size())
            throw new NoSuchPieceException();
        Piece p = pieces.get(piece);
+       Square s = squares.get(p.getPosition());
+       s.removePiece(p);
        p.move(steps);
+       s = squares.get(p.getPosition());
+       s.addPiece(p);
        addMessage("P" + piece + " moved to " + p.getPosition());
        repaint();
    }
@@ -223,11 +234,21 @@ public class Board extends JPanel implements Runnable
        if (piece<0 || piece >= pieces.size())
            throw new NoSuchPieceException();
        Piece p = pieces.get(piece);
+       Square s = squares.get(p.getPosition());
+       s.removePiece(p);
        p.move(destination-p.getPosition());
+       s = squares.get(p.getPosition());
+       s.addPiece(p);
        addMessage("P" + piece + " moved to " + p.getPosition());
        repaint();
    }
 
+   public Square getSquare(int pos) {
+       if (pos < 0 || pos >= 100) {
+           return null;
+       }
+       return squares.get(pos);
+   }
 
    public void drawLadder(Graphics g, int bottom, int top)
    {

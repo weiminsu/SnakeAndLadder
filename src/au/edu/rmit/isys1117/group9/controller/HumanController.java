@@ -6,6 +6,7 @@ import au.edu.rmit.isys1117.group9.exception.BoundaryException;
 import au.edu.rmit.isys1117.group9.model.Dice;
 import au.edu.rmit.isys1117.group9.model.SnakeGuard;
 import au.edu.rmit.isys1117.group9.exception.SnakeGuardPlacementException;
+import au.edu.rmit.isys1117.group9.model.Square;
 
 public class HumanController {
     private Board board;
@@ -95,25 +96,35 @@ public class HumanController {
         }
     }
 
-    public Integer chooseSnakeGuardLocation() {
-        return 0;
+    public Integer chooseSnakeGuardLocation() throws InvalidInputException {
+        while (true) {
+            String input = uiWrapper.promptForInput("Please choose the position to place a snake guard");
+            if (input == null || input.isEmpty()) break;
+            try {
+                int location = Integer.valueOf(input);
+                if(!validateSnakeGuardLocation(location))
+                    throw new AssertionError();
+                return location;
+            } catch (NumberFormatException | AssertionError e) {
+                uiWrapper.showErrorMessage("You can not place a snake guard here.");
+                if(testMode) throw new InvalidInputException();
+            }
+        }
+        return -1;
     }
 
-    public boolean placeSnakeGuard() {
-    	while (true) {
-            String snakeGuardInput = uiWrapper.promptForInput(
-                    "Do you want to place a snake guard this turn?\nEnter the position here, otherwise cancel to continue");
-            if (snakeGuardInput == null || snakeGuardInput.isEmpty())
-                return false;
-            try {
-                int position = Integer.valueOf(snakeGuardInput);
-                SnakeGuard sg = new SnakeGuard(position,2);
-                board.add(sg);
-                return true;
-            } catch (NumberFormatException | SnakeGuardPlacementException e) {
-                uiWrapper.showErrorMessage("You can not place a snake guard here: " + e.getMessage());
-                if (testMode) break;
-            }
+    private boolean validateSnakeGuardLocation(int location) {
+        Square s = board.getSquare(location);
+        return s == null || s.isSnakeHead();
+    }
+
+    public boolean placeSnakeGuard(int position) {
+        try {
+            SnakeGuard sg = new SnakeGuard(position,2);
+            board.add(sg);
+            return true;
+        } catch (SnakeGuardPlacementException e) {
+            uiWrapper.showErrorMessage("You can not place a snake guard here: " + e.getMessage());
         }
     	return false;
     }
