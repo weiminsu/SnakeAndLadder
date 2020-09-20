@@ -37,7 +37,7 @@ public class Admin {
 
     public void validateSnake(int head, int tail) throws Exception {
 
-        if (head > 100 || tail < 1) {
+        if (head > 100 || tail < 0) {
             throw new Exception("Snake out of board");
         }
 
@@ -88,7 +88,7 @@ public class Admin {
 
     public void validateLadder(int top, int bottom) throws Exception {
 
-        if (top > 100 || bottom < 1) {
+        if (top > 100 || bottom < 0) {
             throw new Exception("Ladder out of board");
         }
 
@@ -115,7 +115,7 @@ public class Admin {
         for (Ladder l : ladders) {
             int ladderTop = l.getTop();
             int ladderBase = l.getBottom();
-            if (ladderTop == bottom || ladderBase == top||ladderBase==bottom||ladderTop==top) {
+            if (ladderTop == bottom || ladderBase == top) {
                 throw new Exception("The ladder heads can not connected to others ladders");
 
             }
