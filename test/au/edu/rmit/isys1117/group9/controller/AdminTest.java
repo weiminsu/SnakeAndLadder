@@ -7,21 +7,30 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 public class AdminTest {
+
     @Rule
     public ExpectedException expectedEx = ExpectedException.none();
 
     @Test
-    public void testPutSnakeTooLong() throws Exception {
+    public void testPutSnakeTooLong1() throws Exception {
         expectedEx.expect(Exception.class);
         expectedEx.expectMessage("snake is too long");
         Admin admin = new Admin(new Board(), null);
         admin.doAddSnake(99, 1);
+
     }
 
     @Test
-    public void testNoMoreFiveSnakes() throws Exception {
+    public void testPutSnakeTooLong2() throws Exception {
         expectedEx.expect(Exception.class);
-        expectedEx.expectMessage("too many snakes");
+        expectedEx.expectMessage("snake is too long");
+        Admin admin = new Admin(new Board(), null);
+        admin.doAddSnake(69, 1);
+
+    }
+
+    @Test
+    public void testNoMoreFiveSnakes1() throws Exception {
         Board board = new Board();
         Admin admin = new Admin(board, null);
         admin.doAddSnake(50, 20);
@@ -30,7 +39,19 @@ public class AdminTest {
         admin.doAddSnake(98, 90);
         admin.doAddSnake(75, 67);
         Assert.assertEquals(5, board.getSnakeCounts());
-        admin.doAddSnake(23, 12);
+        
+    }
+
+    @Test
+    public void testNoMoreFiveSnakes2() throws Exception {
+        Board board = new Board();
+        Admin admin = new Admin(board, null);
+        admin.doAddSnake(50, 20);
+        admin.doAddSnake(31, 1);
+        admin.doAddSnake(70, 52);
+        admin.doAddSnake(98, 90);
+        admin.doAddSnake(75, 67);
+        Assert.assertEquals(5, board.getSnakeCounts());
 
     }
 
@@ -59,7 +80,6 @@ public class AdminTest {
 
     }
 
-
     @Test
     public void testPutLadderTooLong() throws Exception {
         expectedEx.expect(Exception.class);
@@ -80,7 +100,6 @@ public class AdminTest {
         admin.doAddLadder(98, 90);
         admin.doAddLadder(75, 67);
         admin.doAddLadder(23, 12);
-
     }
 
     @Test

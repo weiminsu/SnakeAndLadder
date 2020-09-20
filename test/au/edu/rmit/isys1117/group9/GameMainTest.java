@@ -3,7 +3,7 @@ package au.edu.rmit.isys1117.group9;
 import au.edu.rmit.isys1117.group9.controller.Admin;
 import au.edu.rmit.isys1117.group9.controller.HumanController;
 import au.edu.rmit.isys1117.group9.controller.SnakeController;
-import au.edu.rmit.isys1117.group9.GameMain;
+import au.edu.rmit.isys1117.group9.main.GameMain;
 import au.edu.rmit.isys1117.group9.model.Board;
 import org.junit.Assert;
 import org.junit.Before;
@@ -47,7 +47,7 @@ public class GameMainTest {
         Assert.assertNotNull(humanController);
         Assert.assertNotNull(snakeController);
         doReturn(true).when(humanController).move(anyInt(), anyInt());
-        doReturn(true).when(humanController).placeSnakeGuard();
+        doReturn(true).when(humanController).placeSnakeGuard(1);
         doReturn(true).when(humanController).moveTo(anyInt(), anyInt());
         Assert.assertTrue(gameMain.play());
     }

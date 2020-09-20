@@ -105,14 +105,14 @@ public class HumanControllerTest {
     public void testPlaceSnakeGuardSuccess() throws SnakeGuardPlacementException {
         Assert.assertNotNull(board);
         doNothing().when(board).add(any(SnakeGuard.class));
-        controller.placeSnakeGuard();
+        controller.placeSnakeGuard(1);
     }
 
     @Test
     public void testPlaceSnakeGuardFailure() throws SnakeGuardPlacementException {
         Assert.assertNotNull(board);
         doThrow(new RuntimeException()).when(board).add(any(SnakeGuard.class));
-        controller.placeSnakeGuard();
+        controller.placeSnakeGuard(1);
     }
 
     @Test

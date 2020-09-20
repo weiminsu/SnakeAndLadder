@@ -113,7 +113,4 @@ public class BoardTest {
 		assertEquals("Add 2nd guard with base 20 but crashed", b.getSnakeGaurdCounts(), 1);
 		
 	}
-	
-	
-	
 }

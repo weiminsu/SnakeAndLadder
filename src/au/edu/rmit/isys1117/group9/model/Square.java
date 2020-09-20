@@ -1,10 +1,11 @@
 package au.edu.rmit.isys1117.group9.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Square {
     int index;
-    List<Piece> pieces;
+    List<Piece> pieces = new ArrayList<>();
     SnakeGuard snakeGuard;
     Snake snake; // if not null, this square contains snake head
     Ladder ladder; // if not null, this square contains ladder bottom
