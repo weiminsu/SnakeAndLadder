@@ -9,13 +9,12 @@ import javax.swing.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GameMain implements IUserInput {
-    private HumanController humanController;
-    private Board board;
-    private SnakeController snakeController;
-    private Admin admin;
+    private final HumanController humanController;
+    private final Board board;
+    private final SnakeController snakeController;
+    private final Admin admin;
     private int stage;
-    private int turns;
-    private UIWrapper uiWrapper;
+    private final int turns;
 
     public GameMain() {
         this.board = new Board(0);
@@ -24,7 +23,7 @@ public class GameMain implements IUserInput {
         this.admin = new Admin(this.board, this);
         stage = 1;
         turns = 0;
-        uiWrapper = new UIWrapper(board);
+        UIWrapper uiWrapper = new UIWrapper(board);
     }
 
 
