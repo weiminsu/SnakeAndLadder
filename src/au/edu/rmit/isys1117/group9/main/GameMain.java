@@ -29,15 +29,13 @@ public class GameMain implements IUserInput {
 
 
     public void startGame() throws InvalidInputException {
-
         setUp();
         play();
-
     }
 
     public void setUp() {
 
-        int numPieces = getInt("How many human pieces do you want to add", 2, 4);
+        int numPieces = getInt("How many player want to join this game", 2, 4);
         try {
             for (int i = 0; i < numPieces; i++) {
                 this.board.add(new Piece());
@@ -145,8 +143,7 @@ public class GameMain implements IUserInput {
 
 
     // This method constructs a SLGame object and calls its control method
-    public static void main(String args[]) throws
-            Exception {
+    public static void main(String args[]) throws Exception {
         GameMain gameMain = new GameMain();
         gameMain.startGame();
 
