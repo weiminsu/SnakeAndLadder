@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -427,6 +428,35 @@ public class Board extends JPanel implements Runnable
 	   }	   
 	   repaint();	   
    }
+   
+   
+   public HashSet <Integer> getCriticalPosition() {
+	   
+	   HashSet <Integer> cp = new HashSet <Integer>();
+	   
+	   for (Snake i: snakes) {
+		   cp.add(i.getHead());
+		   cp.add(i.getTail());		   
+	   }
+	   
+	   for (Ladder i: ladders) {
+		   cp.add(i.getBottom());
+		   cp.add(i.getTop());
+	   }
+	   
+	   for (SnakeGuard i: snakeGuards) {
+		   cp.add(i.getPosition());
+	   }
+	   
+	   return cp;
+	   
+   }
+   
 
 
+   
+   
+   
+   
+   
 }

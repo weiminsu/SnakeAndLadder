@@ -1,11 +1,12 @@
 package au.edu.rmit.isys1117.group9.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import au.edu.rmit.isys1117.group9.model.Board;
-import au.edu.rmit.isys1117.group9.model.Dice;
 import au.edu.rmit.isys1117.group9.model.Snake;
+import au.edu.rmit.isys1117.group9.model.SnakePlacementException;
 
 public class SnakeController {
 
@@ -32,115 +33,116 @@ public class SnakeController {
 
 
 
-    public void snakeRandomMove() {
-    	//1stly return snake count in the board.
-    	int snakeCount = board.getSnakeCounts();
+    public void snakeRandomMove() throws SnakePlacementException {
+    	   	
+    	try {
+    		//1stly return snake count in the board.
+        	int snakeCount = board.getSnakeCounts();
 
-    	int snakeNo = getRondomNumBetweenRange(0, snakeCount - 1);
+        	int snakeNo = getRondomNumBetweenRange(0, snakeCount - 1);
 
-    	Snake snake = snakes.get(snakeNo);
+        	Snake snake = snakes.get(snakeNo);
 
-    	int head = snake.getHead();
-    	int tail = snake.getTail();
-    	final int length = head - tail;
-    	int y = head % 10;
-    	int x = head / 10;
-    	Direction direction = null;
-    	int pos = 0;
+        	int head = snake.getHead();
+        	int tail = snake.getTail();
+        	final int length = head - tail;
+        	int y = head % 10;
+        	int x = head / 10;
+        	Direction direction = null;
+        	int pos = 0;
+        	
+        	HashSet <Integer> bannedPositions = new HashSet<Integer>();
+        	
+        	bannedPositions = board.getCriticalPosition();
+        	//delete original head position;
+        	bannedPositions.remove(head);
+        	
+        	
+        	while(true) {
+        			
+        		//random direction
+            	int directionNo = getRondomNumBetweenRange(0, 3);
 
-    	while(true) {
+            	direction = Direction.values()[directionNo];
 
-    		//random direction
-        	int directionNo = getRondomNumBetweenRange(0, 3);
+            	//split head position to 2 digits int;
+            	// xy is the pos =====> pos = 10*x + y;
 
-        	direction = Direction.values()[directionNo];
-
-        	//split head position to 2 digits int;
-        	// xy is the pos =====> pos = 10*x + y;
-
-        	pos = 0;
-
-
-        	if (y != 0) {
-
-        		switch (direction) {
-
-            	case topLeft:
-            		pos = 10 * (x + 1) + (10 - y);
-
-            		break;
-            	case topRight:
-            		pos = 10 * (x + 1) + (10 - y) + 2;
-
-            		break;
-            	case bottomLeft:
-            		pos = x * 10 - y;
-
-            		break;
-            	case bottomRight:
-            		pos = x * 10 - y + 2;
-
-            		break;
-            	}
-
-    		} else {
-
-    			switch (direction) {
-
-            	case topLeft:
-            		pos = head + 2;
-
-            		break;
-            	case topRight:
-            		pos = head + 2;
-
-            		break;
-            	case bottomLeft:
-            		pos = head - 18;
-
-            		break;
-            	case bottomRight:
-            		pos = head - 18;
-
-            		break;
-            	}
+            	pos = 0;
 
 
-    		}
+            	if (y != 0) {
 
-        	int tailPos = pos - length;
+            		switch (direction) {
 
-        	if (pos < 0) {
-				continue;
-			} else if (pos > 100) {
-        		continue;
-        	} else if (tailPos < 0) {
-				continue;
-			} else {
-				board.setSnake(head, pos);
-	    		break;
-			}
+                	case topLeft:
+                		pos = 10 * (x + 1) + (10 - y);
 
-    	}
+                		break;
+                	case topRight:
+                		pos = 10 * (x + 1) + (10 - y) + 2;
+
+                		break;
+                	case bottomLeft:
+                		pos = x * 10 - y;
+
+                		break;
+                	case bottomRight:
+                		pos = x * 10 - y + 2;
+
+                		break;
+                	}
+
+        		} else {
+
+        			switch (direction) {
+
+                	case topLeft:
+                		pos = head + 2;
+
+                		break;
+                	case topRight:
+                		pos = head + 2;
+
+                		break;
+                	case bottomLeft:
+                		pos = head - 18;
+
+                		break;
+                	case bottomRight:
+                		pos = head - 18;
+
+                		break;
+                	}
 
 
+        		}
+            	
+            	
+            	int tailPos = pos - length;
 
+            	if (pos < 0) {
+    				continue;
+    			} else if (pos > 100) {
+            		continue;
+            	} else if (tailPos < 0) {
+    				continue;
+    			} else if (bannedPositions.contains(pos)){
+    				
+    				throw new SnakePlacementException();
+    				
+    			} else {
+    				board.setSnake(head, pos);
+    	    		break;
+    			}
 
-
-
+        	}
+        	
+		} catch (SnakePlacementException e) {
+			
+		}
 
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
