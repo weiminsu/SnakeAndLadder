@@ -12,7 +12,7 @@ public class AdminTest {
     public ExpectedException expectedEx = ExpectedException.none();
 
     @Test
-    public void testPutSnakeTooLong1() throws Exception {
+    public void testPutSnakeTooLongNegative1() throws Exception {
         expectedEx.expect(Exception.class);
         expectedEx.expectMessage("snake is too long");
         Admin admin = new Admin(new Board(), null);
@@ -21,7 +21,7 @@ public class AdminTest {
     }
 
     @Test
-    public void testPutSnakeTooLong2() throws Exception {
+    public void testPutSnakeTooLongNegative2() throws Exception {
         expectedEx.expect(Exception.class);
         expectedEx.expectMessage("snake is too long");
         Admin admin = new Admin(new Board(), null);
@@ -30,7 +30,52 @@ public class AdminTest {
     }
 
     @Test
-    public void testNoMoreFiveSnakes1() throws Exception {
+    public void testPutSnakeTooLongPositive1() throws Exception {
+        Admin admin = new Admin(new Board(), null);
+        admin.doAddSnake(26, 1);
+
+    }
+
+    @Test
+    public void testPutSnakeTooLongPositive2() throws Exception {
+        Admin admin = new Admin(new Board(), null);
+        admin.doAddSnake(69, 55);
+
+    }
+
+    @Test
+    public void testNoMoreFiveSnakesNegative1() throws Exception {
+        expectedEx.expect(Exception.class);
+        expectedEx.expectMessage("too many snakes");
+        Board board = new Board();
+        Admin admin = new Admin(board, null);
+        admin.doAddSnake(50, 20);
+        admin.doAddSnake(31, 1);
+        admin.doAddSnake(70, 52);
+        admin.doAddSnake(98, 90);
+        admin.doAddSnake(75, 67);
+        Assert.assertEquals(5, board.getSnakeCounts());
+        admin.doAddSnake(98, 90);
+        admin.doAddSnake(25, 12);
+    }
+
+    @Test
+    public void testNoMoreFiveSnakesNegative2() throws Exception {
+        expectedEx.expect(Exception.class);
+        expectedEx.expectMessage("too many snakes");
+        Board board = new Board();
+        Admin admin = new Admin(board, null);
+        admin.doAddSnake(50, 33);
+        admin.doAddSnake(51, 31);
+        admin.doAddSnake(60, 52);
+        admin.doAddSnake(78, 55);
+        admin.doAddSnake(95, 87);
+        Assert.assertEquals(5, board.getSnakeCounts());
+        admin.doAddSnake(15, 2);
+    }
+
+    @Test
+    public void testNoMoreFiveSnakesPositive1() throws Exception {
         Board board = new Board();
         Admin admin = new Admin(board, null);
         admin.doAddSnake(50, 20);
@@ -43,7 +88,7 @@ public class AdminTest {
     }
 
     @Test
-    public void testNoMoreFiveSnakes2() throws Exception {
+    public void testNoMoreFiveSnakesPositive2() throws Exception {
         Board board = new Board();
         Admin admin = new Admin(board, null);
         admin.doAddSnake(50, 20);
