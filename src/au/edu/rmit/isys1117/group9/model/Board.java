@@ -109,7 +109,7 @@ public class Board extends JPanel implements Runnable
 				}
 			}	
 			snakeGuards.add(sg);
-			
+			repaint();
 		} else {
 			throw new SnakeGuardPlacementException();
 		}

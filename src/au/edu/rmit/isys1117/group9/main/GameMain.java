@@ -3,6 +3,7 @@ import javax.swing.*;
 
 import au.edu.rmit.isys1117.group9.controller.Admin;
 import au.edu.rmit.isys1117.group9.controller.IUserInput;
+import au.edu.rmit.isys1117.group9.controller.SnakeController;
 import au.edu.rmit.isys1117.group9.model.*;
 
 import java.awt.*;
@@ -21,7 +22,7 @@ public class GameMain implements IUserInput
    int snakesCount = 0;				 
    int laddersCount = 0;	
    int trapsCount = 0;
-   
+   SnakeController sc;
    
    // Creating a Board, dice and a Scanner objects
    Board bd = new Board();
@@ -35,7 +36,7 @@ public class GameMain implements IUserInput
    // You must enforce all design rules when placing snakes, ladders and traps
    // If the design rules are not violated users must re-enter values
    public void setup(Board bd) throws Exception
-   {  
+   {  /*
 	  int choice = 0;
 
 	  trapsCount = 1;
@@ -51,6 +52,10 @@ public class GameMain implements IUserInput
 	  bd.add(new Ladder(55,90));
 	  bd.add(new Ladder(38,86));
 	  laddersCount = 3;
+	  */
+	   
+	  bd.add(new Snake(92,34));	
+	  sc = new SnakeController(bd);
 	  
    }	   
      
@@ -108,7 +113,22 @@ public class GameMain implements IUserInput
 	  int numPlayers = 2;
 
       setup(bd);   // setup method currently hard-codes the values
-
+      
+      //sc.snakeRandomMove(sc.selectSnakeToMove());
+      
+      Snake s = new Snake(45, 25);
+		Snake s1 = new Snake(57, 43);   
+		Snake s2 = new Snake(37, 23);
+		SnakeGuard sg1 = new SnakeGuard(55,3);
+		Ladder l1 = new Ladder(53, 35);
+		
+		bd.add(s);
+		bd.add(s1);
+		bd.add(s2);
+		bd.add(sg1);
+		bd.add(l1);
+		sc.snakeRandomMove(s);
+      /*
       bd.clearMessages();  // clears the display board  
       
       String name1 = getString("Player 1 name : ");
@@ -165,6 +185,7 @@ public class GameMain implements IUserInput
       bd.addMessage("Remember to have fun!");   
       bd.addMessage("Danger: Traps,Snakes");    
       bd.addMessage("Trap: lose 3 moves");
+      */
    }
    
    // The very first method to be called

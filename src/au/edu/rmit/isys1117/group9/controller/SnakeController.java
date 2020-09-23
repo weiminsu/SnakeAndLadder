@@ -3,10 +3,13 @@ package au.edu.rmit.isys1117.group9.controller;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import au.edu.rmit.isys1117.group9.model.Board;
 import au.edu.rmit.isys1117.group9.model.Snake;
 import au.edu.rmit.isys1117.group9.model.SnakePlacementException;
+import au.edu.rmit.isys1117.group9.model.snakeMoveException;
 
 public class SnakeController {
 
@@ -14,10 +17,10 @@ public class SnakeController {
 
 	private List <Snake> snakes = new ArrayList<Snake>();
 
-	/*public SnakeController(Board board){
+	public SnakeController(Board board){
         this.board = board;
         snakes = board.getSnakes();
-    }*/
+    }
 
     public boolean SnakeMove() throws IllegalArgumentException {
 
@@ -31,31 +34,40 @@ public class SnakeController {
     	return x;
     }
 
+    
+    public Snake selectSnakeToMove() {
+    	int snakeCount = board.getSnakeCounts();
 
+    	int snakeNo = getRondomNumBetweenRange(0, snakeCount - 1);
 
-    public void snakeRandomMove() throws SnakePlacementException {
+    	
+    	return snakes.get(snakeNo);
+    }
+    
+
+    public void snakeRandomMove(Snake s) throws snakeMoveException {
     	   	
-    	try {
-    		//1stly return snake count in the board.
-        	int snakeCount = board.getSnakeCounts();
-
-        	int snakeNo = getRondomNumBetweenRange(0, snakeCount - 1);
-
-        	Snake snake = snakes.get(snakeNo);
-
-        	int head = snake.getHead();
-        	int tail = snake.getTail();
+    	
+        	int head = s.getHead();
+        	int tail = s.getTail();
         	final int length = head - tail;
         	int y = head % 10;
         	int x = head / 10;
         	Direction direction = null;
-        	int pos = 0;
+
         	
+        	//set for validate snake head
         	HashSet <Integer> bannedPositions = new HashSet<Integer>();
-        	
         	bannedPositions = board.getCriticalPosition();
-        	//delete original head position;
         	bannedPositions.remove(head);
+        	
+        	
+        	//set for validate snake tail
+        	HashSet <Integer> headPositions = new HashSet<Integer>();
+        	for(Snake i : snakes) {
+        		headPositions.add(i.getHead());	
+        	}        	
+        	headPositions.remove(head);
         	
         	
         	while(true) {
@@ -67,11 +79,10 @@ public class SnakeController {
 
             	//split head position to 2 digits int;
             	// xy is the pos =====> pos = 10*x + y;
+            	int pos = 0;
 
-            	pos = 0;
 
-
-            	if (y != 0) {
+            	if ((y != 0) && (y != 1)) {
 
             		switch (direction) {
 
@@ -93,7 +104,7 @@ public class SnakeController {
                 		break;
                 	}
 
-        		} else {
+        		} else if (y == 0){
 
         			switch (direction) {
 
@@ -116,6 +127,28 @@ public class SnakeController {
                 	}
 
 
+        		} else {
+        			
+        			switch (direction) {
+
+                	case topLeft:
+                		pos = head + 18;
+
+                		break;
+                	case topRight:
+                		pos = head + 18;
+
+                		break;
+                	case bottomLeft:
+                		pos = head - 2;
+
+                		break;
+                	case bottomRight:
+                		pos = head - 2;
+
+                		break;
+                	}
+        			
         		}
             	
             	
@@ -129,7 +162,10 @@ public class SnakeController {
     				continue;
     			} else if (bannedPositions.contains(pos)){
     				
-    				throw new SnakePlacementException();
+    				throw new snakeMoveException("Entity overlaps");
+    				
+    			} else if (headPositions.contains(tailPos)){
+    				throw new snakeMoveException("Entity overlaps");
     				
     			} else {
     				board.setSnake(head, pos);
@@ -138,9 +174,7 @@ public class SnakeController {
 
         	}
         	
-		} catch (SnakePlacementException e) {
-			
-		}
+		
 
     }
 
