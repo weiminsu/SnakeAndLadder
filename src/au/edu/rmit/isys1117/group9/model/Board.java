@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,20 +23,29 @@ public class Board extends JPanel implements Runnable
    private Dice dice;
    private String bLines[] = new String[8];
    private int bCount = 0;
-   
+
    private List <Piece> pieces;
    private List <Snake> snakes;
    private List <Ladder> ladders;
 
    private List<SnakeGuard> snakeGuards;
-   
-   
+
+
    public List<Snake> getSnakes(){
 	   return snakes;
-	   
+
    }
-   
-   
+
+   public List<Ladder> getLadder(){
+
+	   return ladders;
+   }
+
+   public List<Piece> getPiece(){
+
+	   return pieces;
+   }
+
    public void addMessage(String line)
    {
 	   if (  bCount < 8)
@@ -45,82 +55,82 @@ public class Board extends JPanel implements Runnable
 		      String temp = line.substring(0,20);
 		      bLines[bCount++] = temp;
 		   }
-		   else bLines[bCount++] = line;   
+		   else bLines[bCount++] = line;
 	   }
-		  
-	      
+
+
 	   repaint();
-   }   
-	   
+   }
+
    public void clearMessages()
    {
 	      bCount = 0;
 	      repaint();
    }
-   
+
    public Dice getDice()
    {
       return dice;
    }
 
    public void add (Snake s) throws SnakePlacementException {
-		
-		
+
+
 		if (snakes.size() < 10) {
-	
+
 			for (Snake i : snakes) {
 				if (s.getHead() == i.getHead()) {
-					throw new SnakePlacementException();	
+					throw new SnakePlacementException();
 				}
-			}	
+			}
 			snakes.add(s);
-			
+
 		} else {
 			throw new SnakePlacementException();
 		}
-		
-	
+
+
 	}
-   
+
    public void add (Ladder l) throws LadderPlacementException {
-		
+
 		if (ladders.size() < 10) {
-			
+
 			for (Ladder i : ladders) {
 				if (l.getBottom() == i.getBottom()) {
-					throw new LadderPlacementException();	
+					throw new LadderPlacementException();
 				}
-			}	
+			}
 			ladders.add(l);
-			
+
 		} else {
 			throw new LadderPlacementException();
 		}
-		
+
 	}
-   
+
    public void add (SnakeGuard sg) throws SnakeGuardPlacementException {
-		
+
 		if (snakeGuards.size() < 4) {
-			
+
 			for (SnakeGuard i : snakeGuards) {
 				if (sg.getPosition() == i.getPosition()) {
-					throw new SnakeGuardPlacementException();	
+					throw new SnakeGuardPlacementException();
 				}
-			}	
+			}
 			snakeGuards.add(sg);
 			repaint();
 		} else {
 			throw new SnakeGuardPlacementException();
 		}
-		
-	} 
-   
+
+	}
+
    public Board()
    {
 	   this(2);
    }
-  
+
    public Board(int n)
    {
       if ( n > 4 || n < 2)
@@ -128,27 +138,27 @@ public class Board extends JPanel implements Runnable
          System.out.println("Minimum 2 players and Maximum 4 players");
          System.exit(0);
       }
-    
+
 	  Container contentPane = frame.getContentPane();
       contentPane.setLayout(new BorderLayout());
-	
+
       frame.getContentPane().add(this,BorderLayout.CENTER);
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setSize(640,520);
       frame.setVisible(true);
       new Thread(this).start();
       //  r.start();
-      
+
       snakes = new ArrayList<Snake>();
       ladders = new ArrayList<Ladder>();
       pieces = new ArrayList<Piece>();
       snakeGuards = new ArrayList<SnakeGuard>();
-      
+
       for (int i = 0; i < n; i++) {
 		pieces.add(new Piece());
-    	  
+
       }
-      
+
 
       dice = new Dice(this);
    }
@@ -162,7 +172,7 @@ public class Board extends JPanel implements Runnable
           Thread.sleep(1000);
         }
         catch (Exception e) {}
-      factor += inc;; 
+      factor += inc;;
       if (factor > 0.5 || factor < -0.5)
          inc = -inc;
       repaint();
@@ -173,31 +183,31 @@ public class Board extends JPanel implements Runnable
    {
       if (pieces.size() > 0)
       {
-         g.setColor(Color.WHITE);   
-         g.fillOval((int)getX(pieces.get(0).getPosition())-10, getY(pieces.get(0).getPosition())-10,20,20); 
-         g.setColor(Color.BLACK);   
-         g.drawString("1",(int)getX(pieces.get(0).getPosition())-5, getY(pieces.get(0).getPosition())+5); 
+         g.setColor(Color.WHITE);
+         g.fillOval((int)getX(pieces.get(0).getPosition())-10, getY(pieces.get(0).getPosition())-10,20,20);
+         g.setColor(Color.BLACK);
+         g.drawString("1",(int)getX(pieces.get(0).getPosition())-5, getY(pieces.get(0).getPosition())+5);
       }
       if (pieces.size() > 1)
       {
-         g.setColor(Color.RED);   
-         g.fillOval((int)getX(pieces.get(1).getPosition())+10, getY(pieces.get(1).getPosition())-10,20,20); 
-         g.setColor(Color.BLACK);   
-         g.drawString("2",(int)getX(pieces.get(1).getPosition())+15, getY(pieces.get(1).getPosition())+5); 
+         g.setColor(Color.RED);
+         g.fillOval((int)getX(pieces.get(1).getPosition())+10, getY(pieces.get(1).getPosition())-10,20,20);
+         g.setColor(Color.BLACK);
+         g.drawString("2",(int)getX(pieces.get(1).getPosition())+15, getY(pieces.get(1).getPosition())+5);
       }
       if (pieces.size() > 2)
       {
-         g.setColor(Color.GRAY);   
-         g.fillOval((int)getX(pieces.get(2).getPosition())-10, getY(pieces.get(2).getPosition())+10,20,20); 
-         g.setColor(Color.BLACK);   
-         g.drawString("3",(int)getX(pieces.get(2).getPosition())-5, getY(pieces.get(2).getPosition())+25); 
+         g.setColor(Color.GRAY);
+         g.fillOval((int)getX(pieces.get(2).getPosition())-10, getY(pieces.get(2).getPosition())+10,20,20);
+         g.setColor(Color.BLACK);
+         g.drawString("3",(int)getX(pieces.get(2).getPosition())-5, getY(pieces.get(2).getPosition())+25);
       }
       if (pieces.size() > 3)
       {
-         g.setColor(Color.CYAN);   
-         g.fillOval((int)getX(pieces.get(3).getPosition())+10, getY(pieces.get(3).getPosition())+10,20,20); 
-         g.setColor(Color.BLACK);   
-         g.drawString("4",(int)getX(pieces.get(3).getPosition())+15, getY(pieces.get(3).getPosition())+25); 
+         g.setColor(Color.CYAN);
+         g.fillOval((int)getX(pieces.get(3).getPosition())+10, getY(pieces.get(3).getPosition())+10,20,20);
+         g.setColor(Color.BLACK);
+         g.drawString("4",(int)getX(pieces.get(3).getPosition())+15, getY(pieces.get(3).getPosition())+25);
       }
    }
 
@@ -210,7 +220,7 @@ public class Board extends JPanel implements Runnable
       double y2 = getY(top);
 
      int steps = (int) Math.sqrt((y2-y1)*(y2-y1) + (x2-x1)*(x2-x1)) / 25 + 1;
- 
+
       int xinc = 5;
       if ( x1 > x2)
          xinc = -xinc;
@@ -218,23 +228,23 @@ public class Board extends JPanel implements Runnable
       if ( y1 > y2)
          yinc = -yinc;
 
-      g.drawLine((int)(x1-xinc),(int)(y1+yinc),(int)(x2-xinc),(int)(y2+yinc)); 
-      g.drawLine((int)(x1-xinc)-1,(int)(y1+yinc),(int)(x2-xinc)-1,(int)(y2+yinc)); 
-      g.drawLine((int)(x1-xinc),(int)(y1+yinc)-1,(int)(x2-xinc),(int)(y2+yinc)-1); 
+      g.drawLine((int)(x1-xinc),(int)(y1+yinc),(int)(x2-xinc),(int)(y2+yinc));
+      g.drawLine((int)(x1-xinc)-1,(int)(y1+yinc),(int)(x2-xinc)-1,(int)(y2+yinc));
+      g.drawLine((int)(x1-xinc),(int)(y1+yinc)-1,(int)(x2-xinc),(int)(y2+yinc)-1);
 
-      g.drawLine((int)(x1+xinc),(int)(y1-yinc),(int)(x2+xinc),(int)(y2-yinc)); 
-      g.drawLine((int)(x1+xinc)-1,(int)(y1-yinc),(int)(x2+xinc)-1,(int)(y2-yinc)); 
-      g.drawLine((int)(x1+xinc),(int)(y1-yinc)-1,(int)(x2+xinc),(int)(y2-yinc)-1); 
+      g.drawLine((int)(x1+xinc),(int)(y1-yinc),(int)(x2+xinc),(int)(y2-yinc));
+      g.drawLine((int)(x1+xinc)-1,(int)(y1-yinc),(int)(x2+xinc)-1,(int)(y2-yinc));
+      g.drawLine((int)(x1+xinc),(int)(y1-yinc)-1,(int)(x2+xinc),(int)(y2-yinc)-1);
 
       double xstep = (x2-x1)/(steps+1);
       double ystep = (y2-y1)/(steps+1);
       for (int i=0; i<steps; i++)
       {
          x1 += xstep;  y1 += ystep;
-         g.drawLine((int)(x1+xinc),(int)(y1-yinc),(int)(x1-xinc),(int)(y1+yinc)); 
-         g.drawLine((int)(x1+xinc)-1,(int)(y1-yinc),(int)(x1-xinc)-1,(int)(y1+yinc)); 
-         g.drawLine((int)(x1+xinc),(int)(y1-yinc)-1,(int)(x1-xinc),(int)(y1+yinc)-1); 
-      }   
+         g.drawLine((int)(x1+xinc),(int)(y1-yinc),(int)(x1-xinc),(int)(y1+yinc));
+         g.drawLine((int)(x1+xinc)-1,(int)(y1-yinc),(int)(x1-xinc)-1,(int)(y1+yinc));
+         g.drawLine((int)(x1+xinc),(int)(y1-yinc)-1,(int)(x1-xinc),(int)(y1+yinc)-1);
+      }
 
    }
 
@@ -246,13 +256,13 @@ public class Board extends JPanel implements Runnable
       else
 	  return  XMARGIN  + 370 - pos%10 * 40;
    }
-   
+
    private int getY(int pos)
    {
       pos--;
       return YMARGIN - 30 + 400 - pos/10 * 40;
    }
-   
+
    public void drawSnake(Graphics g, int head, int tail)
    {
       int x1 = getX(head);
@@ -268,7 +278,7 @@ public class Board extends JPanel implements Runnable
 
       double inc;
       double x = x1,y = y1;
-      
+
       boolean odd = true;
       for (int i=0; i<steps+1; i++)
       {
@@ -294,7 +304,7 @@ public class Board extends JPanel implements Runnable
              inc = -15 * factor;
          else if ( (i%12)% 2 == 0)
              inc = -13 * factor;
-         else 
+         else
              inc = -10 * factor;
          x += xstep;  y += ystep;
          if (odd) {
@@ -306,10 +316,10 @@ public class Board extends JPanel implements Runnable
            odd = true;
          }
          if ( x2 > x1)
-            g.fillOval((int)(x+inc),(int)(y-inc),20-10*i/steps,20-10*i/steps); 
+            g.fillOval((int)(x+inc),(int)(y-inc),20-10*i/steps,20-10*i/steps);
          else
-            g.fillOval((int)(x-inc),(int)(y-inc),20-10*i/steps,20-10*i/steps); 
-      }   
+            g.fillOval((int)(x-inc),(int)(y-inc),20-10*i/steps,20-10*i/steps);
+      }
    }
 
    public void paintComponent(Graphics g) {
@@ -317,33 +327,33 @@ public class Board extends JPanel implements Runnable
       for (int i=0; i<10; i++)
       {
          for (int j=0; j<10; j++){
-           if ((i+j)%2 == 0) 
+           if ((i+j)%2 == 0)
               g.setColor(Color.YELLOW);
-           else 
-              g.setColor(Color.ORANGE);      
-           
-           //for (int k=0; k<snakeGuards.size(); k++)            
+           else
+              g.setColor(Color.ORANGE);
+
+           //for (int k=0; k<snakeGuards.size(); k++)
               g.fillRect(XMARGIN + 40*i,YMARGIN+40*j, 40,40);
 
 	     }
 
       }
       g.setColor(Color.BLACK);
- 	  for (int k =0; k<snakeGuards.size(); k++) 
+ 	  for (int k =0; k<snakeGuards.size(); k++)
  	  {
- 		 int num = snakeGuards.get(k).getPosition(); 
+ 		 int num = snakeGuards.get(k).getPosition();
  		 if ( snakeGuards.get(k).getDuration() == 3 )
-             g.setColor(Color.BLUE);   
+             g.setColor(Color.BLUE);
  		 else if ( snakeGuards.get(k).getDuration() == 4 )
-             g.setColor(Color.GRAY); 
+             g.setColor(Color.GRAY);
  		 else
-             g.setColor(Color.BLACK); 	 	
+             g.setColor(Color.BLACK);
          g.fillRect(getX(num) -10 ,getY(num)-10,40,40);
-   	  } 
-      g.setColor(Color.BLACK); 
-      for ( int i=0; i<100; i++)    	  
+   	  }
+      g.setColor(Color.BLACK);
+      for ( int i=0; i<100; i++)
          g.drawString(""+(i+1), getX(i+1),getY(i+1)+20);
-      for (int i=0; i<snakes.size(); i++) 
+      for (int i=0; i<snakes.size(); i++)
       {
          drawSnake(g,snakes.get(i).getHead(), snakes.get(i).getTail());
       }
@@ -362,101 +372,133 @@ public class Board extends JPanel implements Runnable
 
       for (int i=0; i<bCount; i++)
   		g.drawString(bLines[i], 450, 70 + 30 * i);
-               
+
       drawPieces(g);
       dice.draw(g);
    }
 
    public int getSnakeCounts() {
-	
+
 	   return snakes.size();
    }
 
    public int getLadderCounts() {
-	
+
 	   return ladders.size();
    }
 
    public int getSnakeGaurdCounts() {
-	
+
 	   return snakeGuards.size();
    }
 
-   
+
    public void setPiece(int piece, int pos)
-   {	
-	  
-      pieces.get(piece-1).setPosition(pos);    
+   {
+
+      pieces.get(piece-1).setPosition(pos);
       repaint();
    }
-   
-   
+
+
    public void setSnake(int head, int pos) {
-   
+
 	   for (Snake i : snakes) {
-		   
+
 		   if (i.getHead() == head) {
 			   int length =  i.getHead() - i.getTail();
-			   
+
 			   i.setHeadPosition(pos);
 			   i.setTailPosition(pos - length);
-			   
-		   }		   
+
+		   }
 	   }
-	   
+
 	   repaint();
-	   
+
    }
-   
-   
-   
-  
+
+
+
+
    public void destroyPiece(int piece) {
-	   
+
 	   pieces.remove(piece - 1);
 	   repaint();
    }
 
-   
+
    public void destroySnake(int head) {
-	   
+
 	   for (Snake i : snakes) {
 		   if (i.getHead() == head) {
 			   snakes.remove(i);
 			   break;
-		   }	   
-	   }	   
-	   repaint();	   
+		   }
+	   }
+	   repaint();
    }
-   
-   
+
+
    public HashSet <Integer> getCriticalPosition() {
-	   
+
 	   HashSet <Integer> cp = new HashSet <Integer>();
-	   
+
 	   for (Snake i: snakes) {
 		   cp.add(i.getHead());
-		   cp.add(i.getTail());		   
+		   cp.add(i.getTail());
 	   }
-	   
+
 	   for (Ladder i: ladders) {
 		   cp.add(i.getBottom());
 		   cp.add(i.getTop());
 	   }
-	   
+
 	   for (SnakeGuard i: snakeGuards) {
 		   cp.add(i.getPosition());
 	   }
-	   
+
 	   return cp;
-	   
+
    }
-   
 
 
-   
-   
-   
-   
-   
+   public HashSet <Integer> getSnakeheadPos(){
+
+	   HashSet <Integer> sp = new HashSet <Integer>();
+	   for (Snake i: snakes) {
+		   sp.add(i.getHead());
+
+	   }
+
+	   return sp;
+
+   }
+
+
+   public HashSet<Integer> getLadderbottomPos(){
+
+	   HashSet <Integer> lp = new HashSet <Integer>();
+	   for (Snake i: snakes) {
+		   lp.add(i.getHead());
+
+	   }
+
+	   return lp;
+
+   }
+
+
+   public ArrayList<Integer> getPieceLocation(){
+
+	   ArrayList<Integer> pl = new ArrayList<Integer>();
+
+	   for(Piece i: pieces){
+		   pl.add(i.getPosition());
+	   }
+
+	   return pl;
+
+   }
+
 }

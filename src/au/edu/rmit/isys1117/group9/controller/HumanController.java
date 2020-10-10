@@ -1,7 +1,9 @@
 package au.edu.rmit.isys1117.group9.controller;
-import au.edu.rmit.isys1117.group9.model.Board;
-import au.edu.rmit.isys1117.group9.model.Dice;
-import au.edu.rmit.isys1117.group9.model.SnakeGuard;
+import java.util.ArrayList;
+import java.util.HashSet;
+
+import au.edu.rmit.isys1117.group9.model.*;
+
 
 public class HumanController {
     private Board board;
@@ -37,5 +39,42 @@ public class HumanController {
     }
 
 
+    public void validatePieceLcations(){
+
+    	//extract all the snake head and ladder bottom position
+    	HashSet<Integer> shp = board.getSnakeheadPos();
+    	HashSet<Integer> lbp = board.getLadderbottomPos();
+
+    	//extract all the piece location
+    	ArrayList<Integer> pl = board.getPieceLocation();
+
+    	//compare overlapping
+    	for (int i = 0; i < pl.size(); i++) {
+    		//drop from snake
+			if (shp.contains(pl.get(i))) {
+				for (Snake j: board.getSnakes()) {
+					if (j.getHead() == pl.get(i)) {
+						//move to j.getBottom()
+					}
+				}
+			}
+    		//climb ladder
+			if (lbp.contains(pl.get(i))) {
+				for (Ladder m: board.getLadder()) {
+					if (m.getBottom() == pl.get(i)) {
+						//move to m.getTop()
+
+					}
+
+				}
+			}
+
+
+
+		}
+
+
+
+    }
 
 }
