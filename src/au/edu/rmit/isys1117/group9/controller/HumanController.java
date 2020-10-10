@@ -56,7 +56,7 @@ public class HumanController {
 				for (Snake j: board.getSnakes()) {
 					if (j.getHead() == pl.get(i)) {
 						//move to j.getBottom()
-
+						//?
 						message += "Move piece " + pl.get(i) + " to " + j.getTail() + "\n";
 					}
 				}
@@ -67,6 +67,7 @@ public class HumanController {
 				for (Ladder m: board.getLadder()) {
 					if (m.getBottom() == pl.get(i)) {
 						//move to m.getTop()
+						//?
 						message += "Move piece " + pl.get(i) + " to " + m.getTop() + "\n";
 					}
 
