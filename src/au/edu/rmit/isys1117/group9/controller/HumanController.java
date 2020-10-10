@@ -39,8 +39,9 @@ public class HumanController {
     }
 
 
-    public void validatePieceLcations(){
+    public String validatePieceLcations(){
 
+    	String message = "";
     	//extract all the snake head and ladder bottom position
     	HashSet<Integer> shp = board.getSnakeheadPos();
     	HashSet<Integer> lbp = board.getLadderbottomPos();
@@ -55,15 +56,18 @@ public class HumanController {
 				for (Snake j: board.getSnakes()) {
 					if (j.getHead() == pl.get(i)) {
 						//move to j.getBottom()
+
+						message += "Move piece " + pl.get(i) + " to " + j.getTail() + "\n";
 					}
 				}
+
 			}
     		//climb ladder
 			if (lbp.contains(pl.get(i))) {
 				for (Ladder m: board.getLadder()) {
 					if (m.getBottom() == pl.get(i)) {
 						//move to m.getTop()
-
+						message += "Move piece " + pl.get(i) + " to " + m.getTop() + "\n";
 					}
 
 				}
@@ -73,6 +77,7 @@ public class HumanController {
 
 		}
 
+    	return message;
 
 
     }
