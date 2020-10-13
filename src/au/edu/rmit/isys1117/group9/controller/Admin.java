@@ -81,7 +81,7 @@ public class Admin {
 
     public void doAddLadder(int top, int bottom) throws Exception {
         validateLadder(top, bottom);
-        Ladder ladder = new Ladder(top, bottom);
+        Ladder ladder = new Ladder(bottom, top);
         ladders.add(ladder);
         board.add(ladder);
     }

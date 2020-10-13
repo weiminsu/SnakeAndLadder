@@ -11,6 +11,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -68,17 +69,18 @@ public class Board extends JPanel implements Runnable
    }
 
    public void add (Snake s) throws SnakePlacementException {
-		
-		
+
 		if (snakes.size() < 10) {
-	
 			for (Snake i : snakes) {
 				if (s.getHead() == i.getHead()) {
 					throw new SnakePlacementException();	
 				}
 			}	
 			snakes.add(s);
-			squares.get(s.getHead()).setSnake(s);
+			Square square = getSquare(s.getHead());
+			square.setSnake(s, true);
+			square = getSquare(s.getTail());
+			square.setSnake(s, false);
 		} else {
 			throw new SnakePlacementException();
 		}
@@ -96,7 +98,7 @@ public class Board extends JPanel implements Runnable
 				}
 			}	
 			ladders.add(l);
-			squares.get(l.getBottom()).setLadder(l);
+			getSquare(l.getBottom()).setLadder(l);
 		} else {
 			throw new LadderPlacementException();
 		}
@@ -105,7 +107,7 @@ public class Board extends JPanel implements Runnable
 
 	public void add (Piece p) throws Exception {
        pieces.add(p);
-       squares.get(p.getPosition()).addPiece(p);
+       getSquare(p.getPosition()).addPiece(p);
 	}
    
    public void add (SnakeGuard sg) throws SnakeGuardPlacementException {
@@ -118,7 +120,7 @@ public class Board extends JPanel implements Runnable
 				}
 			}	
 			snakeGuards.add(sg);
-			squares.get(sg.getPosition()).setSnakeGuard(sg);
+			getSquare(sg.getPosition()).setSnakeGuard(sg);
 		} else {
 			throw new SnakeGuardPlacementException();
 		}
@@ -215,7 +217,11 @@ public class Board extends JPanel implements Runnable
       }
    }
 
-    public void removePiece(Piece piece) {
+    public List<Snake> getSnakes(){
+        return snakes;
+    }
+
+   public void removePiece(Piece piece) {
         this.pieces.remove(piece);
     }
 
@@ -242,20 +248,20 @@ public class Board extends JPanel implements Runnable
        if (piece<0 || piece >= pieces.size())
            throw new NoSuchPieceException();
        Piece p = pieces.get(piece);
-       Square s = squares.get(p.getPosition());
+       Square s = getSquare(p.getPosition());
        s.removePiece(p);
        p.move(destination-p.getPosition());
-       s = squares.get(p.getPosition());
+       s = getSquare(p.getPosition());
        s.addPiece(p);
        addMessage("P" + piece + " moved to " + p.getPosition());
        repaint();
    }
 
    public Square getSquare(int pos) {
-       if (pos < 0 || pos >= 100) {
+       if (pos < 1 || pos > 100) {
            return null;
        }
-       return squares.get(pos);
+       return squares.get(pos-1);
    }
 
    public void drawLadder(Graphics g, int bottom, int top)
@@ -459,19 +465,95 @@ public class Board extends JPanel implements Runnable
    public void setSnake(int head, int pos) {
    
 	   for (Snake i : snakes) {
-		   
 		   if (i.getHead() == head) {
-		   
 			   i.setPosition(pos);
-   
+			   Square s = getSquare(head);
+			   s.removeSnake();
+			   s = getSquare(pos);
+			   s.setSnake(i, true);
 		   }		   
 	   }
-	   
 	   repaint();
-	   
    }
-   
-   public void test() {
-	   
-   }
+
+    public List<Ladder> getLadders(){
+
+        return ladders;
+    }
+
+    public HashSet <Integer> getCriticalPosition() {
+
+        HashSet <Integer> cp = new HashSet <Integer>();
+
+        for (Snake i: snakes) {
+            cp.add(i.getHead());
+            cp.add(i.getTail());
+        }
+
+        for (Ladder i: ladders) {
+            cp.add(i.getBottom());
+            cp.add(i.getTop());
+        }
+
+        for (SnakeGuard i: snakeGuards) {
+            cp.add(i.getPosition());
+        }
+
+        return cp;
+
+    }
+
+    public HashSet<Integer> getLadderbottomPos(){
+
+        HashSet <Integer> lp = new HashSet <Integer>();
+        for (Snake i: snakes) {
+            lp.add(i.getHead());
+
+        }
+        return lp;
+
+    }
+
+    public HashSet <Integer> getSnakeheadPos(){
+
+        HashSet<Integer> sp = new HashSet <Integer>();
+        for (Snake i: snakes) {
+            sp.add(i.getHead());
+
+        }
+        return sp;
+
+    }
+
+    public List <Piece> getPieceByLocation(int pos){
+
+        List <Piece> m = new ArrayList<Piece>();
+
+        for(Piece i: pieces){
+            if (i.getPosition() == pos) {
+                m.add(i);
+            }
+        }
+        return m;
+    }
+
+    public ArrayList<Integer> getPieceLocation(){
+        ArrayList<Integer> pl = new ArrayList<Integer>();
+
+        for(Piece i: pieces){
+            pl.add(i.getPosition());
+        }
+
+        return pl;
+    }
+
+    public void movePieveFromAtoB(int a, int b) throws BoundaryException, NoSuchPieceException {
+       int pieceNumber = 0;
+        for(Piece i: pieces){
+            if (i.getPosition() == a) {
+                movePieceTo(pieceNumber, b);
+            }
+            pieceNumber++;
+        }
+    }
 }

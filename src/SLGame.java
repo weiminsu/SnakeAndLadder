@@ -3,7 +3,6 @@ import au.edu.rmit.isys1117.group9.exception.InvalidInputException;
 import au.edu.rmit.isys1117.group9.exception.LadderPlacementException;
 import au.edu.rmit.isys1117.group9.exception.SnakeGuardPlacementException;
 import au.edu.rmit.isys1117.group9.exception.SnakePlacementException;
-import au.edu.rmit.isys1117.group9.model.Board;
 
 public class SLGame {
 

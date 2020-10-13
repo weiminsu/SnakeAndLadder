@@ -70,7 +70,7 @@ public class Dice {
         return n;
     }
 
-    static int getThrow() {
+    public int getThrow() {
         return (int) (Math.random() * 6) + 1;
     }
 }

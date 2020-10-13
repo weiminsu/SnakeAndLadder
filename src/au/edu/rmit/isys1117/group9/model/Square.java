@@ -52,8 +52,9 @@ public class Square {
         return snake;
     }
 
-    public void setSnake(Snake snake) {
+    public void setSnake(Snake snake, boolean isSnakeHead) {
         this.snake = snake;
+        this.isSnakeHead = isSnakeHead;
     }
 
     public void removeSnake() {

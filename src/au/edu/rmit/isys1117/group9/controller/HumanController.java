@@ -41,7 +41,7 @@ public class HumanController {
         while (true) {
             String input = uiWrapper.promptForInput("Please choose the piece to move");
             try {
-                int pieceToMove = Integer.valueOf(input)-1;
+                int pieceToMove = Integer.parseInt(input)-1;
                 if (pieceToMove < 0 || pieceToMove >= board.getPieceCounts())
                     throw new AssertionError();
                 return pieceToMove;
@@ -140,10 +140,10 @@ public class HumanController {
 
     public Integer chooseSnakeGuardLocation() throws InvalidInputException {
         while (true) {
-            String input = uiWrapper.promptForInput("Please choose the position to place a snake OOOuard");
+            String input = uiWrapper.promptForInput("Please choose the position to place a snake guard");
             if (input == null || input.isEmpty()) break;
             try {
-                int location = Integer.valueOf(input);
+                int location = Integer.parseInt(input);
                 if(!validateSnakeGuardLocation(location))
                     throw new AssertionError();
                 return location;
