@@ -92,10 +92,11 @@ public class Admin {
             throw new Exception("Ladder out of board");
         }
 
-        if (ladders.size() >= 5) {
+        if (ladders.size() >=5) {
             throw new Exception("Too many ladders");
 
         }
+
         if (top - bottom <= 0 || top - bottom > 30) {
             throw new Exception("Ladder is too long");
         }
