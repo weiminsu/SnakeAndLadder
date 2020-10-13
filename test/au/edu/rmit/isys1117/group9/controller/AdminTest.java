@@ -1,6 +1,8 @@
 package au.edu.rmit.isys1117.group9.controller;
 
-import au.edu.rmit.isys1117.group9.model.Board;
+import controller.Admin;
+import model.Board;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

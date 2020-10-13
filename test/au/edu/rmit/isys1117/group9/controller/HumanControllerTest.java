@@ -1,10 +1,11 @@
 package au.edu.rmit.isys1117.group9.controller;
 
 
-import au.edu.rmit.isys1117.group9.model.Board;
-import au.edu.rmit.isys1117.group9.model.Dice;
-import au.edu.rmit.isys1117.group9.model.SnakeGuard;
-import au.edu.rmit.isys1117.group9.model.SnakeGuardPlacementException;
+import controller.HumanController;
+import exception.SnakeGuardPlacementException;
+import model.Board;
+import model.Dice;
+import model.SnakeGuard;
 
 import org.junit.Assert;
 import org.junit.Before;

@@ -6,6 +6,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import exception.LadderPlacementException;
+import exception.SnakeGuardPlacementException;
+import exception.SnakePlacementException;
+import model.Board;
+import model.Ladder;
+import model.Snake;
+import model.SnakeGuard;
+
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 

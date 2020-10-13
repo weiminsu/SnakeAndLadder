@@ -1,10 +1,11 @@
 package au.edu.rmit.isys1117.group9;
 
-import au.edu.rmit.isys1117.group9.controller.Admin;
-import au.edu.rmit.isys1117.group9.controller.HumanController;
-import au.edu.rmit.isys1117.group9.controller.SnakeController;
-import au.edu.rmit.isys1117.group9.main.GameMain;
-import au.edu.rmit.isys1117.group9.model.Board;
+import controller.Admin;
+import controller.HumanController;
+import controller.SnakeController;
+import main.GameMain;
+import model.Board;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

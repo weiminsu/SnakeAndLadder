@@ -1,10 +1,10 @@
-package au.edu.rmit.isys1117.group9.controller;
-
-import au.edu.rmit.isys1117.group9.model.Board;
-import au.edu.rmit.isys1117.group9.model.Ladder;
-import au.edu.rmit.isys1117.group9.model.Snake;
+package controller;
 
 import java.util.ArrayList;
+
+import model.Board;
+import model.Ladder;
+import model.Snake;
 
 public class Admin {
     private Board board;
@@ -32,10 +32,14 @@ public class Admin {
             Snake snake = new Snake(head, tail);
             snakes.add(snake);
             board.add(snake);
-		    	
+
     }
 
     public void validateSnake(int head, int tail) throws Exception {
+
+        if (head > 100 || tail < 1) {
+            throw new Exception("Snake out of board");
+        }
 
         if (snakes.size() >= 5) {
             throw new Exception("too many snakes");
@@ -49,7 +53,7 @@ public class Admin {
             throw new Exception("snake is too long");
         }
 
-        if (head >= 81 && head <= 100) {
+        if (head >= 81) {
             for (Snake s : snakes) {
                 int tempHead = s.getHead();
                 if (tempHead >= 81 && tempHead <= 100) {
@@ -84,6 +88,10 @@ public class Admin {
 
     public void validateLadder(int top, int bottom) throws Exception {
 
+        if (top > 100 || bottom < 1) {
+            throw new Exception("Ladder out of board");
+        }
+
         if (ladders.size() >= 5) {
             throw new Exception("Too many ladders");
 
@@ -107,7 +115,7 @@ public class Admin {
         for (Ladder l : ladders) {
             int ladderTop = l.getTop();
             int ladderBase = l.getBottom();
-            if (ladderTop == bottom || ladderBase == top) {
+            if (ladderTop == bottom || ladderBase == top||ladderBase==bottom||ladderTop==top) {
                 throw new Exception("The ladder heads can not connected to others ladders");
 
             }

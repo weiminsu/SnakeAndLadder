@@ -1,4 +1,4 @@
-package au.edu.rmit.isys1117.group9.controller;
+package controller;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import au.edu.rmit.isys1117.group9.model.Board;
-import au.edu.rmit.isys1117.group9.model.Snake;
-import au.edu.rmit.isys1117.group9.model.SnakePlacementException;
-import au.edu.rmit.isys1117.group9.model.snakeMoveException;
+import exception.SnakePlacementException;
+import exception.snakeMoveException;
+import model.Board;
+import model.Snake;
 
 public class SnakeController {
 
@@ -34,44 +34,44 @@ public class SnakeController {
     	return x;
     }
 
-    
+
     public Snake selectSnakeToMove() {
     	int snakeCount = board.getSnakeCounts();
 
     	int snakeNo = getRondomNumBetweenRange(0, snakeCount - 1);
 
-    	
+
     	return snakes.get(snakeNo);
     }
-    
 
-    public void snakeRandomMove(Snake s) throws snakeMoveException {
-    	   	
-    	
-        	int head = s.getHead();
+
+    public void snakeRandomMove(Snake s) {
+
+    	try {
+    		int head = s.getHead();
         	int tail = s.getTail();
         	final int length = head - tail;
         	int y = head % 10;
         	int x = head / 10;
         	Direction direction = null;
 
-        	
+
         	//set for validate snake head
         	HashSet <Integer> bannedPositions = new HashSet<Integer>();
         	bannedPositions = board.getCriticalPosition();
         	bannedPositions.remove(head);
-        	
-        	
+
+
         	//set for validate snake tail
         	HashSet <Integer> headPositions = new HashSet<Integer>();
         	for(Snake i : snakes) {
-        		headPositions.add(i.getHead());	
-        	}        	
+        		headPositions.add(i.getHead());
+        	}
         	headPositions.remove(head);
-        	
-        	
+
+
         	while(true) {
-        			
+
         		//random direction
             	int directionNo = getRondomNumBetweenRange(0, 3);
 
@@ -128,7 +128,7 @@ public class SnakeController {
 
 
         		} else {
-        			
+
         			switch (direction) {
 
                 	case topLeft:
@@ -148,10 +148,10 @@ public class SnakeController {
 
                 		break;
                 	}
-        			
+
         		}
-            	
-            	
+
+
             	int tailPos = pos - length;
 
             	if (pos < 0) {
@@ -161,20 +161,25 @@ public class SnakeController {
             	} else if (tailPos < 0) {
     				continue;
     			} else if (bannedPositions.contains(pos)){
-    				
+
     				throw new snakeMoveException("Entity overlaps");
-    				
+
     			} else if (headPositions.contains(tailPos)){
     				throw new snakeMoveException("Entity overlaps");
-    				
+
     			} else {
     				board.setSnake(head, pos);
     	    		break;
     			}
 
         	}
-        	
-		
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+
+
 
     }
 

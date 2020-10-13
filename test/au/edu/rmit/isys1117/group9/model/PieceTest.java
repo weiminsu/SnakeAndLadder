@@ -7,6 +7,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import exception.BoundaryException;
+import model.Piece;
+
 public class PieceTest {
 	Piece p;
 	@BeforeClass

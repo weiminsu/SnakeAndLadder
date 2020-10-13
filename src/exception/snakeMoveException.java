@@ -1,4 +1,4 @@
-package au.edu.rmit.isys1117.group9.model;
+package exception;
 
 public class snakeMoveException extends Exception {
 	public snakeMoveException() {

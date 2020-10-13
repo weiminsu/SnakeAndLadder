@@ -2,6 +2,9 @@ package au.edu.rmit.isys1117.group9.model;
 
 import org.junit.Test;
 
+import model.Board;
+import model.Dice;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

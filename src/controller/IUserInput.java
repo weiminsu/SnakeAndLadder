@@ -1,4 +1,4 @@
-package au.edu.rmit.isys1117.group9.controller;
+package controller;
 
 /**
  * A protocol to gather user input

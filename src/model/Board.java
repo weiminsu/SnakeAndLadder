@@ -1,4 +1,4 @@
-package au.edu.rmit.isys1117.group9.model;
+package model;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -6,11 +6,16 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import exception.*;
+
 
 
 public class Board extends JPanel implements Runnable
@@ -31,6 +36,7 @@ public class Board extends JPanel implements Runnable
    private List<SnakeGuard> snakeGuards;
 
 
+   private List<Square> squares;
    public List<Snake> getSnakes(){
 	   return snakes;
 
@@ -153,10 +159,16 @@ public class Board extends JPanel implements Runnable
       ladders = new ArrayList<Ladder>();
       pieces = new ArrayList<Piece>();
       snakeGuards = new ArrayList<SnakeGuard>();
+      squares = new ArrayList<>();
+      for (int i=0; i<100; i++) {
+          squares.add(new Square(i));
+      }
 
       for (int i = 0; i < n; i++) {
-		pieces.add(new Piece());
+          Piece p = new Piece();
+          pieces.add(p);
 
+          squares.get(0).addPiece(p);
       }
 
 
@@ -392,6 +404,10 @@ public class Board extends JPanel implements Runnable
 	   return snakeGuards.size();
    }
 
+   public int getPieceCounts() {
+       return pieces.size();
+   }
+
 
    public void setPiece(int piece, int pos)
    {
@@ -500,5 +516,88 @@ public class Board extends JPanel implements Runnable
 	   return pl;
 
    }
+
+
+   public Piece getPiece(int piece) {
+       if (piece<0 || piece >= pieces.size())
+           return null;
+       return pieces.get(piece);
+   }
+
+
+   public void movePiece(int piece, int steps) throws BoundaryException, NoSuchPieceException {
+       if (piece<0 || piece >= pieces.size())
+           throw new NoSuchPieceException();
+       Piece p = pieces.get(piece);
+       Square s = squares.get(p.getPosition());
+       s.removePiece(p);
+       p.move(steps);
+       s = squares.get(p.getPosition());
+       s.addPiece(p);
+       addMessage("P" + piece + " moved to " + p.getPosition());
+       repaint();
+   }
+
+   public void movePieceTo(int piece, int destination) throws BoundaryException, NoSuchPieceException {
+       if (piece<0 || piece >= pieces.size())
+           throw new NoSuchPieceException();
+       Piece p = pieces.get(piece);
+       Square s = squares.get(p.getPosition());
+       s.removePiece(p);
+       p.move(destination-p.getPosition());
+       s = squares.get(p.getPosition());
+       s.addPiece(p);
+       addMessage("P" + piece + " moved to " + p.getPosition());
+       repaint();
+   }
+
+   public Square getSquare(int pos) {
+       if (pos < 0 || pos >= 100) {
+           return null;
+       }
+       return squares.get(pos);
+   }
+
+
+   public void movePieveFromAtoB (int a, int b) throws BoundaryException {
+
+	   for(Piece i: pieces){
+		   if (i.getPosition() == a) {
+			   i.move(b - a);
+		   }
+	   }
+
+	   repaint();
+
+
+   }
+
+   public List <Piece> getPieceByLocation(int pos){
+
+	   List <Piece> m = new ArrayList<Piece>();
+
+	   for(Piece i: pieces){
+		   if (i.getPosition() == pos) {
+			   m.add(i);
+		   }
+
+	   }
+
+
+	   return m;
+
+
+
+
+   }
+
+
+
+
+
+
+
+
+
 
 }
