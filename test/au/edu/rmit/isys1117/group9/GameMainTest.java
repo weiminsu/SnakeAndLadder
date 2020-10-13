@@ -47,9 +47,8 @@ public class GameMainTest {
         Assert.assertNotNull(humanController);
         Assert.assertNotNull(snakeController);
         doReturn(true).when(humanController).move(anyInt(), anyInt());
-        doReturn(true).when(humanController).placeSnakeGuard();
         doReturn(true).when(humanController).moveTo(anyInt(), anyInt());
-        Assert.assertTrue(gameMain.play());
+        gameMain.play();
     }
 
     @Test
@@ -57,6 +56,6 @@ public class GameMainTest {
         Assert.assertNotNull(humanController);
         Assert.assertNotNull(snakeController);
         doReturn(false).when(humanController).moveTo(anyInt(), anyInt());
-        Assert.assertFalse(gameMain.play());
+        gameMain.play();
     }
 }

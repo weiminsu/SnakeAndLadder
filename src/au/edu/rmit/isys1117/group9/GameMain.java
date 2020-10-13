@@ -7,6 +7,7 @@ import au.edu.rmit.isys1117.group9.controller.SnakeController;
 import au.edu.rmit.isys1117.group9.controller.UIWrapper;
 import au.edu.rmit.isys1117.group9.exception.InvalidInputException;
 import au.edu.rmit.isys1117.group9.model.Board;
+import au.edu.rmit.isys1117.group9.model.Square;
 
 import javax.swing.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -18,6 +19,8 @@ public class GameMain implements IUserInput {
     private Admin admin;
     private int stage;
     private int turns;
+    private boolean humanWins;
+    private boolean snakeWins;
     private UIWrapper uiWrapper;
     private boolean testMode;
 
@@ -28,6 +31,8 @@ public class GameMain implements IUserInput {
         this.admin=new Admin(this.board, this);
         stage = 1;
         turns = 0;
+        humanWins = false;
+        snakeWins = false;
         uiWrapper = new UIWrapper(board);
         testMode = false;
     }
@@ -93,8 +98,8 @@ public class GameMain implements IUserInput {
         return true;
     }
 
-    public boolean play() throws InvalidInputException {
-        while(true) {
+    public void play() throws InvalidInputException {
+        while(!humanWins && !snakeWins) {
             // Human playing on even turns and snake playing on odd turns
             if (turns%2 == 0) {
                 if (stage == 2) {
@@ -109,19 +114,42 @@ public class GameMain implements IUserInput {
 
                 } else if (stage == 3) {
                     int piece = humanController.choosePiece();
-                    int destination = humanController.chooseDestination();
+                    int destination = humanController.chooseDestination(piece);
                     humanController.moveTo(piece, destination);
                 }
             } else {
                 // placeholder
                 snakeController.move();
             }
-
             // after a turn, see if any game rule is triggered, for example, if a human piece is paralyzed, or if a human piece is
             // moving up with a ladder, if the game should proceed to next stage, or if there is a winner of the game and so on
             applyGameRules();
+            turns++;
         }
     }
+
+    public void applyHumanPieceOnSnakeHeadRule(int position) {
+        Square square = board.getSquare(position);
+        if (square.isSnakeHead()) {
+            snakeWins = true;
+        }
+    }
+
+    public void applyHumanPieceOnSnakeTailRule(int position) {
+        Square square = board.getSquare(position);
+        if (square.isSnakeTail()) {
+            square.removeSnake();
+            board.removeSnake(square.getSnake());
+            if (board.getSnakeCounts() == 0) {
+                humanWins = true;
+            }
+        }
+    }
+
+    public void applyMaxTurnsRule() {
+
+    }
+
 
     public void applyGameRules() {
 

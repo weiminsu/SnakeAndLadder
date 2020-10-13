@@ -63,6 +63,10 @@ public class Board extends JPanel implements Runnable
       return dice;
    }
 
+   public void setDice(Dice dice) {
+       this.dice = dice;
+   }
+
    public void add (Snake s) throws SnakePlacementException {
 		
 		
@@ -211,6 +215,10 @@ public class Board extends JPanel implements Runnable
       }
    }
 
+    public void removePiece(Piece piece) {
+        this.pieces.remove(piece);
+    }
+
    public Piece getPiece(int piece) {
        if (piece<0 || piece >= pieces.size())
            return null;
@@ -220,11 +228,11 @@ public class Board extends JPanel implements Runnable
    public void movePiece(int piece, int steps) throws BoundaryException, NoSuchPieceException {
        if (piece<0 || piece >= pieces.size())
            throw new NoSuchPieceException();
-       Piece p = pieces.get(piece);
-       Square s = squares.get(p.getPosition());
+       Piece p = getPiece(piece);
+       Square s = getSquare(p.getPosition());
        s.removePiece(p);
        p.move(steps);
-       s = squares.get(p.getPosition());
+       s = getSquare(p.getPosition());
        s.addPiece(p);
        addMessage("P" + piece + " moved to " + p.getPosition());
        repaint();
@@ -359,6 +367,11 @@ public class Board extends JPanel implements Runnable
             g.fillOval((int)(x-inc),(int)(y-inc),20-10*i/steps,20-10*i/steps); 
       }   
    }
+
+    public void removeSnake(Snake snake) {
+        snakes.remove(snake);
+        repaint();
+    }
 
    public void paintComponent(Graphics g) {
       super.paintComponent(g);

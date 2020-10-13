@@ -8,6 +8,9 @@ import au.edu.rmit.isys1117.group9.model.SnakeGuard;
 import au.edu.rmit.isys1117.group9.exception.SnakeGuardPlacementException;
 import au.edu.rmit.isys1117.group9.model.Square;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class HumanController {
     private Board board;
     private UIWrapper uiWrapper;
@@ -23,6 +26,10 @@ public class HumanController {
         testMode = true;
     }
 
+    // for test purpose
+    public void setUiWrapper(UIWrapper uiWrapper) {
+        this.uiWrapper = uiWrapper;
+    }
 
     public int rollDice() {
         uiWrapper.showInfoMessage("Click to confirm to roll the dice");
@@ -35,7 +42,7 @@ public class HumanController {
             String input = uiWrapper.promptForInput("Please choose the piece to move");
             try {
                 int pieceToMove = Integer.valueOf(input)-1;
-                if (pieceToMove <= 0 && pieceToMove > board.getPieceCounts())
+                if (pieceToMove < 0 || pieceToMove >= board.getPieceCounts())
                     throw new AssertionError();
                 return pieceToMove;
             } catch (NumberFormatException | AssertionError e) {
@@ -45,25 +52,60 @@ public class HumanController {
         }
     }
 
-    public int chooseDestination() throws InvalidInputException {
+    public int chooseDestination(int pieceNumber) throws InvalidInputException {
         while (true) {
             String input = uiWrapper.promptForInput("Please choose the position to move to");
             try {
-                int destination = Integer.valueOf(input);
-                if(!validateDestination(destination))
+                int destination = Integer.parseInt(input);
+                if(!validateDestination(board.getPiece(pieceNumber).getPosition(), destination))
                     throw new AssertionError();
                 return destination;
-            } catch (NumberFormatException | AssertionError e) {
-                uiWrapper.showErrorMessage("You can only move within the board");
+            } catch (NumberFormatException e) {
+                uiWrapper.showErrorMessage("Not a valid input. Must be an integer!");
+                if(testMode) throw new InvalidInputException();
+            } catch (AssertionError e) {
+                uiWrapper.showErrorMessage("Not a valid move. Can only be a diagonal or knight move!");
                 if(testMode) throw new InvalidInputException();
             }
         }
     }
 
-    private boolean validateDestination(int destination) {
-        if (destination < 0 || destination >= 100)
-            return false;
-        return true;
+    private boolean validateDestination(int currentPosition, int destination) {
+        int i = currentPosition/10 + 1; // current row number
+        int j = i%2==0 ? i*10-currentPosition+1 : currentPosition%10; // current column number
+        Set<Integer> validDest = new HashSet<>();
+        for(int k=-2; k<=2; k++){
+            if (k!=0){
+                int destRow = i+k;
+                if(destRow>=1 && destRow<=10){
+                    int squareUnder = destRow%2 == 0 ? 10*destRow-j+1 : 10*(destRow-1)+j;
+                    int lowerBoundary = 10*(destRow-1);
+                    int upperBoundary = 10*destRow;
+                    if (k==-2 || k==2) {
+                        int t = squareUnder+1;
+                        if (t <= upperBoundary) {
+                            validDest.add(t);
+                        }
+                        t = squareUnder-1;
+                        if (t > lowerBoundary) {
+                            validDest.add(t);
+                        }
+                    } else {
+                        for (int t=squareUnder+1; t<=squareUnder+2; t++) {
+                            if (t <= upperBoundary) {
+                                validDest.add(t);
+                            }
+                        }
+                        for (int t=squareUnder-2; t<=squareUnder-1; t++) {
+                            if (t > lowerBoundary) {
+                                validDest.add(t);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return validDest.contains(destination);
     }
 
     public void move(int pieceToMove, int n) throws IllegalArgumentException {
@@ -98,7 +140,7 @@ public class HumanController {
 
     public Integer chooseSnakeGuardLocation() throws InvalidInputException {
         while (true) {
-            String input = uiWrapper.promptForInput("Please choose the position to place a snake guard");
+            String input = uiWrapper.promptForInput("Please choose the position to place a snake OOOuard");
             if (input == null || input.isEmpty()) break;
             try {
                 int location = Integer.valueOf(input);
@@ -115,7 +157,7 @@ public class HumanController {
 
     private boolean validateSnakeGuardLocation(int location) {
         Square s = board.getSquare(location);
-        return s == null || s.isSnakeHead();
+        return s == null || s.getSnake() == null;
     }
 
     public boolean placeSnakeGuard(int position) {

@@ -26,14 +26,12 @@ public class HumanControllerTest {
     @Before
     public void setUp() throws Exception {
         board = new Board();
-        // add two human pieces for testing
-        board.add(new Piece());
-        board.add(new Piece());
         dice = Mockito.mock(Dice.class);
+        board.setDice(dice);
         uiWrapper = Mockito.mock(UIWrapper.class);
         controller = new HumanController(board);
         controller.enableTestMode();
-        when(board.getDice()).thenReturn(dice);
+        controller.setUiWrapper(uiWrapper);
         doNothing().when(uiWrapper).showInfoMessage(anyString());
         doNothing().when(uiWrapper).showErrorMessage(anyString());
     }
@@ -60,18 +58,6 @@ public class HumanControllerTest {
     public void testChoosePieceInvalidInput() throws Exception {
         doReturn("asdgaw").when(uiWrapper).promptForInput(anyString());
         controller.choosePiece();
-    }
-
-    @Test
-    public void testChooseDestinationSuccess() throws Exception {
-        doReturn("50").when(uiWrapper).promptForInput(anyString());
-        Assert.assertEquals(50, controller.chooseDestination());
-    }
-
-    @Test(expected = InvalidInputException.class)
-    public void testChooseDestinationFailure() throws Exception {
-        doReturn("101").when(uiWrapper).promptForInput(anyString());
-        controller.chooseDestination();
     }
 
     @Test
@@ -102,31 +88,62 @@ public class HumanControllerTest {
     }
 
     @Test
-    public void testPlaceSnakeGuardSuccess() throws SnakeGuardPlacementException {
-        Assert.assertNotNull(board);
-        doNothing().when(board).add(any(SnakeGuard.class));
-        controller.placeSnakeGuard();
+    public void testChooseDestinationValidDiagonalMove() throws Exception {
+        Piece piece = board.getPiece(0);
+        board.movePieceTo(0, 25); // move the piece to a position convenient for test
+        Assert.assertEquals(25, piece.getPosition());
+        doReturn("35").when(uiWrapper).promptForInput(anyString());
+        Assert.assertEquals(35, controller.chooseDestination(0));
     }
 
     @Test
-    public void testPlaceSnakeGuardFailure() throws SnakeGuardPlacementException {
-        Assert.assertNotNull(board);
-        doThrow(new RuntimeException()).when(board).add(any(SnakeGuard.class));
-        controller.placeSnakeGuard();
+    public void testChooseDestinationValidKnightMove() throws Exception {
+        Piece piece = board.getPiece(0);
+        board.movePieceTo(0, 25); // move the piece to a position convenient for test
+        Assert.assertEquals(25, piece.getPosition());
+        doReturn("46").when(uiWrapper).promptForInput(anyString());
+        Assert.assertEquals(46, controller.chooseDestination(0));
     }
 
-    @Test
-    public void testMoveWithoutDiceSuccess() throws Exception {
-        Assert.assertNotNull(board);
-        doNothing().when(board).add(any(Piece.class));
-        controller.moveTo(anyInt(), anyInt());
+    @Test(expected = InvalidInputException.class)
+    public void testChooseDestinationInvalidInput() throws Exception {
+        Piece piece = board.getPiece(0);
+        board.movePieceTo(0, 25); // move the piece to a position convenient for test
+        Assert.assertEquals(25, piece.getPosition());
+        doReturn("abc").when(uiWrapper).promptForInput(anyString());
+        controller.chooseDestination(0);
+        verify(uiWrapper, times(1)).showErrorMessage("Not a valid input. Must be an integer!");
     }
 
-    @Test
-    public void testMoveWithoutDiceFailure() throws Exception {
-        Assert.assertNotNull(board);
-        doThrow(new RuntimeException()).when(board).add(any(Piece.class));
-        controller.moveTo(anyInt(), anyInt());
+    @Test(expected = InvalidInputException.class)
+    public void testChooseDestinationInvalidlMove() throws Exception {
+        Piece piece = board.getPiece(0);
+        board.movePieceTo(0, 25); // move the piece to a position convenient for test
+        Assert.assertEquals(25, piece.getPosition());
+        doReturn("75").when(uiWrapper).promptForInput(anyString());
+        controller.chooseDestination(0);
+        verify(uiWrapper, times(1)).showErrorMessage("Not a valid move. Can only be a diagonal or knight move!");
     }
+
+    @Test(expected = InvalidInputException.class)
+    public void testChooseDestinationInvalidDiagonalMove() throws Exception {
+        Piece piece = board.getPiece(0);
+        board.movePieceTo(0, 31); // move the piece to a position convenient for test
+        Assert.assertEquals(31, piece.getPosition());
+        doReturn("51").when(uiWrapper).promptForInput(anyString());
+        controller.chooseDestination(0);
+        verify(uiWrapper, times(1)).showErrorMessage("Not a valid move. Can only be a diagonal or knight move!");
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void testChooseDestinationInvalidKnightMove() throws Exception {
+        Piece piece = board.getPiece(0);
+        board.movePieceTo(0, 82); // move the piece to a position convenient for test
+        Assert.assertEquals(82, piece.getPosition());
+        doReturn("101").when(uiWrapper).promptForInput(anyString());
+        controller.chooseDestination(0);
+        verify(uiWrapper, times(1)).showErrorMessage("Not a valid move. Can only be a diagonal or knight move!");
+    }
+
 }
 
