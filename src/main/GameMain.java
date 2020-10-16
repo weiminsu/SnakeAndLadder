@@ -99,23 +99,34 @@ public class GameMain implements UserInput {
 			}
     		board.clearMessages();
     		board.addMessage("Round " + (rounds + 1));
+
     		for (int i = 0; i < pieces.size(); i++) {
-    			board.addMessage("Piece " + (i+1) + " total ladder climb: " + pieces.get(i).getLadderClimb());
+    			board.addMessage("Piece " + (i+1) + " climbed: " + pieces.get(i).getLadderClimb());
+
     		}
 
     		for (int i = 0; i < pieces.size(); i++) {
+    			if (pieces.get(i).isParalyse()) {
+    				board.addMessage("Player " + (i + 1) + " is paralysed!");
+    			}
+			}
+
+
+    		for (int i = 0; i < pieces.size(); i++) {
     			uiWrapper.showInfoMessage("Player " + (i + 1) + "'s turn.");
+
+    			if (pieces.get(i).isParalyse()) {
+    				uiWrapper.showInfoMessage("Player " + (i + 1) + " is paralysed!");
+    				pieces.get(i).decrementParalyseDuration();
+					continue;
+				}
+
     			if (humanController.ifPlaceGuard()) {
 					continue;
 				}
 
 
-    			if (pieces.get(i).isParalyse()) {
-    				uiWrapper.showInfoMessage("Player " + (i + 1) + " is paralysed!");
-    				board.addMessage("Player " + (i + 1) + " is paralysed!");
-    				pieces.get(i).decrementParalyseDuration();
-					continue;
-				}
+
     			humanController.stage2validatePieceLcations();
     			if (godMode == true) {
     				humanController.godMove(i);
@@ -141,6 +152,7 @@ public class GameMain implements UserInput {
 				break;
 			}
     		//snake turn;
+    		uiWrapper.showInfoMessage("Snakes move");
     		snakeController.moveall();
     		humanController.stage2validatePieceLcations();
 
@@ -181,29 +193,27 @@ public class GameMain implements UserInput {
     		for (int j = 0; j < pieces.size(); j++) {
     			uiWrapper.showInfoMessage("Player " + (j + 1) + "'s turn.");
     			if (godMode == true) {
-    				humanController.godMove(j);
+    				if (uiWrapper.showComfirmDialog("Do you want test knight move?") == 0) {
+    					humanController.knightMove(j);
+					} else {
+						humanController.godMove(j);
+					}
+
 				} else {
 					humanController.knightMove(j);
 				}
 
 
 
-				if (humanController.stage3validatePieceLcations() == false) {
-					uiWrapper.showInfoMessage("Sorry! you lost!");
-					return;
-				}
+				humanController.stage3validatePieceLcations();
+
 			}
 
     		snakeController.moveall();
-    		if (humanController.stage3validatePieceLcations() == false) {
-				uiWrapper.showInfoMessage("Sorry! you lost!");
-				return;
-			}
+    		humanController.stage3validatePieceLcations();
+
 
 		}
-
-    	uiWrapper.showInfoMessage("Sorry! you lost!");
-		return;
 
     }
 

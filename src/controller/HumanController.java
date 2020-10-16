@@ -21,20 +21,15 @@ public class HumanController {
     private List <Snake> snakes;
     private List <Ladder> ladders;
     private UIWrapper uiWrapper;
-    private boolean testMode;
+
 
     public HumanController(Board board){
         this.board = board;
         uiWrapper =  new UIWrapper(board);
-        testMode = false;
         pieces = board.getPiece();
     	snakes = board.getSnakes();
     	ladders = board.getLadder();
 
-    }
-
-    public void enableTestMode() {
-        testMode = true;
     }
 
     // for test purpose
@@ -50,7 +45,7 @@ public class HumanController {
 
 
     //if place snake guard;
-    public boolean ifPlaceGuard() throws SnakeGuardPlacementException{
+    public boolean ifPlaceGuard() {
     	if (board.getSnakeGaurdCounts() < 3) {
 			int n = uiWrapper.showComfirmDialog("Do you want to place a snake guard");
 			if (n == 0) {
@@ -61,7 +56,7 @@ public class HumanController {
 
 					//cant place guard over snake head;
 					for(Snake i: snakes){
-						if (position == i.getTop()) {
+						if (position == i.getTop()||position == i.getBottom()) {
 							throw new SnakeGuardPlacementException();
 						}
 					}
@@ -76,8 +71,11 @@ public class HumanController {
 						throw new SnakeGuardPlacementException();
 					}
 
+				} catch (SnakeGuardPlacementException e){
+					uiWrapper.showErrorMessage("Cant place over snakes!");
+					return false;
 				} catch (Exception e) {
-					uiWrapper.showErrorMessage("Something Wrong!");
+					uiWrapper.showErrorMessage("Invalid input!");
 					return false;
 				}
 			}
@@ -132,10 +130,8 @@ public class HumanController {
                 return destination;
             } catch (NumberFormatException e) {
                 uiWrapper.showErrorMessage("Not a valid input. Must be an integer!");
-                if(testMode) throw new InvalidInputException();
             } catch (AssertionError e) {
                 uiWrapper.showErrorMessage("Not a valid move. Can only be a diagonal or knight move!");
-                if(testMode) throw new InvalidInputException();
             }
         }
     }
@@ -186,7 +182,7 @@ public class HumanController {
     }
 
     //Stage 3 validation;
-    public boolean stage3validatePieceLcations(){
+    public void stage3validatePieceLcations(){
 
 
     	List <Snake> gonnaremove = new ArrayList<Snake>();
@@ -194,20 +190,19 @@ public class HumanController {
     	for(Piece i: pieces){
     		for(Snake j: snakes){
     			if (i.getPosition() == j.getBottom()) {
-    				uiWrapper.showInfoMessage("Killed a snake!");
+    				board.addMessage("Killed a snake!");
 					gonnaremove.add(j);
 				}
 
     			if (i.getPosition() == j.getTop()) {
     				uiWrapper.showInfoMessage("Sorry, you lost!");
-					return false;
+    				System.exit(0);
 				}
     		}
     	}
     	snakes.removeAll(gonnaremove);
 
     	board.repaint();
-    	return true;
 
     }
 

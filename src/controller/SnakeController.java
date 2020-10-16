@@ -10,6 +10,7 @@ import exception.SnakePlacementException;
 import exception.snakeMoveException;
 import model.Board;
 import model.Snake;
+import model.SnakeGuard;
 
 public class SnakeController {
 
@@ -81,6 +82,10 @@ public class SnakeController {
         	}
         	headPositions.remove(head);
 
+        	HashSet <Integer> snakeGuardPositions = new HashSet<Integer>();
+        	for(SnakeGuard i: board.getSnakeGuard()){
+        		snakeGuardPositions.add(i.getPosition());
+        	}
 
         	while(true) {
 
@@ -175,7 +180,9 @@ public class SnakeController {
     			} else if (headPositions.contains(tailPos)){
     				throw new snakeMoveException("Entity overlaps");
 
-    			} else {
+    			} else if (snakeGuardPositions.contains(tailPos)){
+    				throw new snakeMoveException("Entity overlaps");
+    			} else{
     				board.setSnake(head, pos);
     	    		break;
     			}

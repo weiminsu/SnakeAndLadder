@@ -105,6 +105,8 @@ public class Board extends JPanel implements Runnable
 				if (sg.getPosition() == i.getPosition()) {
 					throw new SnakeGuardPlacementException();
 				}
+
+
 			}
 			snakeGuards.add(sg);
 			repaint();
@@ -332,7 +334,7 @@ public class Board extends JPanel implements Runnable
  	  {
  		 int num = snakeGuards.get(k).getPosition();
 
-         g.setColor(Color.BLUE);
+         g.setColor(Color.CYAN);
 
          g.fillRect(getX(num) -10 ,getY(num)-10,40,40);
    	  }
@@ -390,6 +392,11 @@ public class Board extends JPanel implements Runnable
 
 	   return pieces;
    }
+
+   public List<SnakeGuard> getSnakeGuard(){
+	   return snakeGuards;
+   }
+
 
    public void setPiece(int piece, int pos)
    {
