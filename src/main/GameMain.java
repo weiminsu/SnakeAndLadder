@@ -18,7 +18,8 @@ public class GameMain implements IUserInput {
     private Board board;
     private SnakeController snakeController;
     private Admin admin;
-    private int stage;
+    static private int stage;
+    static boolean godMode = false;
     private int turns;
     private UIWrapper uiWrapper;
 
@@ -42,14 +43,12 @@ public class GameMain implements IUserInput {
     }
 
     public void setUp() {
-
-
-
         // placeholder
         for (int i = 0; i < 5; i++) {
             //plainMessage("Admin please put snake" + (i + 1));
             while (true) {
                 try {
+
                     int head = ThreadLocalRandom.current().nextInt(0, 101);
                     int length = ThreadLocalRandom.current().nextInt(1, 31);
                     int tail = head - length;
@@ -78,72 +77,189 @@ public class GameMain implements IUserInput {
         stage = 2;
     }
 
-    public boolean play() throws InvalidInputException, BoundaryException {
-
+    public void secondStage() throws SnakeGuardPlacementException, BoundaryException, snakeMoveException  {
+    	Boolean ifwin = false;
     	List <Piece> pieces = board.getPiece();
 
-    	for (int i = this.turns; turns < 50; turns++) {
 
-    		for (int j = 0; j<pieces.size(); j++){
-
-    			int n = humanController.rollDice();
-
-    			humanController.move(j, n);
-
-  
-
-
-    			humanController.validatePieceLcations();
-    			if (board.getSnakeGaurdCounts()<4) {
-    				int a = uiWrapper.showComfirmDialog("Do you want place snake guard?");
-
-    				if (a == 0) {
-    					int snakeGuardPos = humanController.chooseSnakeGuardLocation();
-    					humanController.placeSnakeGuard(snakeGuardPos);
-					}
+    	//loop 50 rounds;
+    	for (int rounds = 0; rounds<50; rounds++){
+    		//piece turn;
+    		uiWrapper.showInfoMessage("Round " + (rounds + 1));
+    		board.clearMessages();
+    		for (int i = 0; i < pieces.size(); i++) {
+    			uiWrapper.showInfoMessage("Player " + (i + 1) + "'s turn.");
+    			if (humanController.ifPlaceGuard()) {
+					continue;
 				}
-    		}
 
-    		snakeController.snakeRandomMove(snakeController.selectSnakeToMove());
-    		humanController.validatePieceLcations();
 
+    			if (pieces.get(i).isParalyse()) {
+    				uiWrapper.showInfoMessage("Player " + (i + 1) + " is paralysed!");
+    				board.addMessage("Player " + (i + 1) + " is paralysed!");
+    				pieces.get(i).decrementParalyseDuration();
+					continue;
+				}
+
+        		humanController.movePieceByDice(i);
+        		humanController.stage2validatePieceLcations();
+        		board.addMessage("Player " + (i+1) + " ladder: " + pieces.get(i).getLadderClimb());
+        		if (pieces.get(i).getPosition() == 100) {
+        			if (pieces.get(i).getLadderClimb() >= 3) {
+        				ifwin = true;
+    					break;
+					} else {
+						uiWrapper.showInfoMessage("You have start from 1!");
+						pieces.get(i).setPosition(1);
+					}
+
+				}
+			}
+
+    		if (ifwin == true) {
+				break;
+			}
+    		//snake turn;
+    		snakeController.moveall();
+    		humanController.stage2validatePieceLcations();
+
+    	}
+
+    	if (ifwin == true) {
+			uiWrapper.showInfoMessage("Stage 2 wins!");
+			stage = 3;
+		} else {
+			uiWrapper.showInfoMessage("Sorry you lost!");
 		}
 
 
 
-
-
-
-
-
-
-
-        while (true) {
-            // Human playing on even turns and snake playing on odd turns
-            if (turns % 2 == 0) {
-                if (stage == 2) {
-                    int snakeGuardPos = humanController.chooseSnakeGuardLocation();
-                    if (snakeGuardPos == -1) {
-                        int n = humanController.rollDice();
-                        int piece = humanController.choosePiece();
-                        humanController.move(piece, n);
-                    } else {
-                        humanController.placeSnakeGuard(snakeGuardPos);
-                    }
-
-                } else if (stage == 3) {
-                    int piece = humanController.choosePiece();
-                   // int destination = humanController.chooseDestination();
-                 //  humanController.moveTo(piece, destination);
-                }
-            } else {
-                 //placeholder
-                //snakeController.move();
-                snakeController.snakeRandomMove(snakeController.selectSnakeToMove());
-         		humanController.validatePieceLcations();
-            }
-        }
     }
+
+    public void secondStageDeveloper() throws SnakeGuardPlacementException, BoundaryException, snakeMoveException  {
+
+
+    	Boolean ifwin = false;
+    	List <Piece> pieces = board.getPiece();
+
+
+    	//loop 50 rounds;
+    	for (int rounds = 0; rounds<50; rounds++){
+    		//piece turn;
+    		uiWrapper.showInfoMessage("Round " + (rounds + 1));
+    		board.clearMessages();
+    		for (int i = 0; i < pieces.size(); i++) {
+    			uiWrapper.showInfoMessage("Player " + (i + 1) + "'s turn.");
+    			if (humanController.ifPlaceGuard()) {
+					continue;
+				}
+
+
+    			if (pieces.get(i).isParalyse()) {
+    				uiWrapper.showInfoMessage("Player " + (i + 1) + " is paralysed!");
+    				board.addMessage("Player " + (i + 1) + " is paralysed!");
+    				pieces.get(i).decrementParalyseDuration();
+					continue;
+				}
+
+        		humanController.godMove(i);
+        		humanController.stage2validatePieceLcations();
+        		board.addMessage("Player " + (i+1) + " ladder: " + pieces.get(i).getLadderClimb());
+        		if (pieces.get(i).getPosition() == 100) {
+        			if (pieces.get(i).getLadderClimb() >= 3) {
+        				ifwin = true;
+    					break;
+					} else {
+						uiWrapper.showInfoMessage("You have start from 1!");
+						pieces.get(i).setPosition(1);
+					}
+
+				}
+			}
+
+    		if (ifwin == true) {
+				break;
+			}
+    		//snake turn;
+    		snakeController.moveall();
+    		humanController.stage2validatePieceLcations();
+
+    	}
+
+    	if (ifwin == true) {
+			uiWrapper.showInfoMessage("Stage 2 wins!");
+			stage = 3;
+		} else {
+			uiWrapper.showInfoMessage("Sorry you lost!");
+		}
+
+
+    }
+
+    public void thirdStage() throws InvalidInputException, snakeMoveException{
+    	board.clearLadder();
+    	board.clearSnakeGaurd();
+    	List<Piece> pieces = board.getPiece();
+    	for (int rounds = 0; rounds < 20; rounds++) {
+    		uiWrapper.showInfoMessage("Round " + (rounds + 1));
+    		for (int j = 0; j < pieces.size(); j++) {
+    			uiWrapper.showInfoMessage("Player " + (j + 1) + "'s turn.");
+				humanController.knightMove(j);
+				if (humanController.stage3validatePieceLcations() == false) {
+					uiWrapper.showInfoMessage("Sorry! you lost!");
+					return;
+				}
+			}
+
+    		snakeController.moveall();
+    		if (humanController.stage3validatePieceLcations() == false) {
+				uiWrapper.showInfoMessage("Sorry! you lost!");
+				return;
+			}
+
+		}
+
+    	uiWrapper.showInfoMessage("Sorry! you lost!");
+		return;
+
+    }
+
+    public void thirdStagedeveloper() throws InvalidInputException, snakeMoveException{
+    	board.clearLadder();
+    	board.clearSnakeGaurd();
+    	List<Piece> pieces = board.getPiece();
+    	for (int rounds = 0; rounds < 20; rounds++) {
+    		uiWrapper.showInfoMessage("Round " + (rounds + 1));
+    		for (int j = 0; j < pieces.size(); j++) {
+    			uiWrapper.showInfoMessage("Player " + (j + 1) + "'s turn.");
+				humanController.godMove(j);
+				if (humanController.stage3validatePieceLcations() == false) {
+					uiWrapper.showInfoMessage("Sorry! you lost!");
+					return;
+				}
+			}
+
+    		snakeController.moveall();
+    		if (humanController.stage3validatePieceLcations() == false) {
+				uiWrapper.showInfoMessage("Sorry! you lost!");
+				return;
+			}
+
+		}
+
+    	uiWrapper.showInfoMessage("Sorry! you lost!");
+		return;
+
+    }
+
+    public void ifdeveloper(){
+    	int n =uiWrapper.showComfirmDialog("Developer mode?");
+    	if (n==0) {
+			godMode = true;
+		}
+
+    }
+
 
     // A method to print a message and to read an int value in the range specified
     @Override
@@ -183,12 +299,35 @@ public class GameMain implements IUserInput {
                 JOptionPane.PLAIN_MESSAGE);
     }
 
+    public void godMode(){
+    	int n = uiWrapper.showComfirmDialog("developer mode?");
+    	if (n == 0) {
+			godMode = true;
+		}
+
+    }
+
+
 
     // This method constructs a SLGame object and calls its control method
     public static void main(String args[]) throws Exception {
         GameMain gameMain = new GameMain();
         gameMain.startGame();
-        gameMain.play();
+
+        gameMain.godMode();
+
+        if (godMode == false) {
+        	gameMain.secondStage();
+        	if (stage == 3) {
+    			gameMain.thirdStage();
+    		}
+		} else {
+			gameMain.secondStageDeveloper();
+			if (stage == 3) {
+    			gameMain.thirdStagedeveloper();
+    		}
+		}
+
 
 
 

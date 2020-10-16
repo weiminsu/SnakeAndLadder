@@ -24,33 +24,15 @@ public class Board extends JPanel implements Runnable
    private double factor = 0.2;
    private int XMARGIN = 20;
    private int YMARGIN = 20;
-   //private int pieces[];
    private Dice dice;
    private String bLines[] = new String[8];
    private int bCount = 0;
-
    private List <Piece> pieces;
    private List <Snake> snakes;
    private List <Ladder> ladders;
-
    private List<SnakeGuard> snakeGuards;
-
-
    private List<Square> squares;
-   public List<Snake> getSnakes(){
-	   return snakes;
 
-   }
-
-   public List<Ladder> getLadder(){
-
-	   return ladders;
-   }
-
-   public List<Piece> getPiece(){
-
-	   return pieces;
-   }
 
    public void addMessage(String line)
    {
@@ -85,7 +67,7 @@ public class Board extends JPanel implements Runnable
 		if (snakes.size() < 10) {
 
 			for (Snake i : snakes) {
-				if (s.getHead() == i.getHead()) {
+				if (s.getTop() == i.getTop()) {
 					throw new SnakePlacementException();
 				}
 			}
@@ -223,7 +205,6 @@ public class Board extends JPanel implements Runnable
       }
    }
 
-
    public void drawLadder(Graphics g, int bottom, int top)
    {
       double x1 = getX(bottom);
@@ -354,12 +335,9 @@ public class Board extends JPanel implements Runnable
  	  for (int k =0; k<snakeGuards.size(); k++)
  	  {
  		 int num = snakeGuards.get(k).getPosition();
- 		 if ( snakeGuards.get(k).getDuration() == 3 )
-             g.setColor(Color.BLUE);
- 		 else if ( snakeGuards.get(k).getDuration() == 4 )
-             g.setColor(Color.GRAY);
- 		 else
-             g.setColor(Color.BLACK);
+
+         g.setColor(Color.BLUE);
+
          g.fillRect(getX(num) -10 ,getY(num)-10,40,40);
    	  }
       g.setColor(Color.BLACK);
@@ -367,7 +345,7 @@ public class Board extends JPanel implements Runnable
          g.drawString(""+(i+1), getX(i+1),getY(i+1)+20);
       for (int i=0; i<snakes.size(); i++)
       {
-         drawSnake(g,snakes.get(i).getHead(), snakes.get(i).getTail());
+         drawSnake(g,snakes.get(i).getTop(), snakes.get(i).getBottom());
       }
       for (int i=0; i<ladders.size(); i++)
          drawLadder(g,ladders.get(i).getBottom(), ladders.get(i).getTop());
@@ -408,21 +386,36 @@ public class Board extends JPanel implements Runnable
        return pieces.size();
    }
 
+   public List<Snake> getSnakes(){
+	   return snakes;
+
+   }
+
+   public List<Ladder> getLadder(){
+
+	   return ladders;
+   }
+
+   public List<Piece> getPiece(){
+
+	   return pieces;
+   }
 
    public void setPiece(int piece, int pos)
    {
 
-      pieces.get(piece-1).setPosition(pos);
+      pieces.get(piece).setPosition(pos);
       repaint();
    }
+
 
 
    public void setSnake(int head, int pos) {
 
 	   for (Snake i : snakes) {
 
-		   if (i.getHead() == head) {
-			   int length =  i.getHead() - i.getTail();
+		   if (i.getTop() == head) {
+			   int length =  i.getTop() - i.getBottom();
 
 			   i.setHeadPosition(pos);
 			   i.setTailPosition(pos - length);
@@ -434,35 +427,25 @@ public class Board extends JPanel implements Runnable
 
    }
 
-
-
-
-   public void destroyPiece(int piece) {
-
-	   pieces.remove(piece - 1);
+   public void clearLadder (){
+	   ladders.clear();
 	   repaint();
+
    }
 
-
-   public void destroySnake(int head) {
-
-	   for (Snake i : snakes) {
-		   if (i.getHead() == head) {
-			   snakes.remove(i);
-			   break;
-		   }
-	   }
+   public void clearSnakeGaurd(){
+	   snakeGuards.clear();
 	   repaint();
-   }
 
+   }
 
    public HashSet <Integer> getCriticalPosition() {
 
 	   HashSet <Integer> cp = new HashSet <Integer>();
 
 	   for (Snake i: snakes) {
-		   cp.add(i.getHead());
-		   cp.add(i.getTail());
+		   cp.add(i.getTop());
+		   cp.add(i.getBottom());
 	   }
 
 	   for (Ladder i: ladders) {
@@ -483,24 +466,11 @@ public class Board extends JPanel implements Runnable
 
 	   HashSet <Integer> sp = new HashSet <Integer>();
 	   for (Snake i: snakes) {
-		   sp.add(i.getHead());
+		   sp.add(i.getTop());
 
 	   }
 
 	   return sp;
-
-   }
-
-
-   public HashSet<Integer> getLadderbottomPos(){
-
-	   HashSet <Integer> lp = new HashSet <Integer>();
-	   for (Snake i: snakes) {
-		   lp.add(i.getHead());
-
-	   }
-
-	   return lp;
 
    }
 
@@ -525,32 +495,6 @@ public class Board extends JPanel implements Runnable
    }
 
 
-   public void movePiece(int piece, int steps) throws BoundaryException, NoSuchPieceException {
-       if (piece<0 || piece >= pieces.size())
-           throw new NoSuchPieceException();
-       Piece p = pieces.get(piece);
-       Square s = squares.get(p.getPosition());
-       s.removePiece(p);
-       p.move(steps);
-       s = squares.get(p.getPosition());
-       s.addPiece(p);
-       addMessage("P" + piece + " moved to " + p.getPosition());
-       repaint();
-   }
-
-   public void movePieceTo(int piece, int destination) throws BoundaryException, NoSuchPieceException {
-       if (piece<0 || piece >= pieces.size())
-           throw new NoSuchPieceException();
-       Piece p = pieces.get(piece);
-       Square s = squares.get(p.getPosition());
-       s.removePiece(p);
-       p.move(destination-p.getPosition());
-       s = squares.get(p.getPosition());
-       s.addPiece(p);
-       addMessage("P" + piece + " moved to " + p.getPosition());
-       repaint();
-   }
-
    public Square getSquare(int pos) {
        if (pos < 0 || pos >= 100) {
            return null;
@@ -561,11 +505,13 @@ public class Board extends JPanel implements Runnable
 
    public void movePieveFromAtoB (int a, int b) throws BoundaryException {
 
-	   for(Piece i: pieces){
-		   if (i.getPosition() == a) {
-			   i.move(b - a);
+	   for (int i = 0; i < pieces.size(); i++) {
+		   if (pieces.get(i).getPosition() == a) {
+			   setPiece(i+1, b);
 		   }
 	   }
+
+
 
 	   repaint();
 
@@ -586,17 +532,7 @@ public class Board extends JPanel implements Runnable
 
 	   return m;
 
-
-
-
    }
-
-
-
-
-
-
-
 
 
 

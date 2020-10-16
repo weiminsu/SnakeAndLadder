@@ -41,16 +41,27 @@ public class Piece {
 	}
 
 	public void paralyse() {
-		paralyseDuration = 1;
+		paralyseDuration = 2;
 	}
+	
 
+	
+	
 	public boolean isParalyse() {
-		return paralyseDuration != 0? true: false;
-
+		if (paralyseDuration != 0) {
+			return true;
+		} else {
+			return false;
+		}
+		
+	
 	}
 
 	public void decrementParalyseDuration(){
-		paralyseDuration++;
+		if (paralyseDuration == 0) {
+			return;
+		}
+		paralyseDuration--;
 	}
 
 

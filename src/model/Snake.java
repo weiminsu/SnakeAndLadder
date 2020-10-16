@@ -1,21 +1,20 @@
 package model;
 
-public class Snake
+public class Snake extends Entity
 {
-   private int head;
-   private int tail;
+
    public Snake(int h, int t)
    {
-       head = h;
-       tail = t;
+       top = h;
+       bottom = t;
    }
-   public int getHead() { return head; }
-   public int getTail() { return tail; } 
+
+
    public void setHeadPosition(int pos) {
-	   head = pos;
+	   top = pos;
    }
-   
+
    public void setTailPosition(int pos) {
-	   tail = pos;
+	   bottom = pos;
    }
 }

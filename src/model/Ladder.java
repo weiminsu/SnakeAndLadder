@@ -1,14 +1,13 @@
 package model;
 
-public class Ladder
+public class Ladder extends Entity
 {
-   private int bottom;
-   private int top;
-   public Ladder(int b, int t)
+
+   public Ladder(int t, int b)
    {
        bottom = b;
        top = t;
    }
-   public int getBottom() { return bottom; }
-   public int getTop() { return top; } 
+
+
 }

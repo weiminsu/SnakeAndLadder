@@ -45,14 +45,26 @@ public class SnakeController {
     }
 
 
-    public void snakeRandomMove(Snake s) {
+    public void moveall() throws snakeMoveException{
+
+    	for(Snake s: snakes){
+    		snakeRandomMove(s);
+    	}
+
+    }
+
+
+
+
+    public void snakeRandomMove(Snake s) throws snakeMoveException {
 
     	try {
-    		int head = s.getHead();
-        	int tail = s.getTail();
-        	final int length = head - tail;
-        	int y = head % 10;
-        	int x = head / 10;
+
+    		int head = s.getTop();
+        	int tail = s.getBottom();
+        	int length = head - tail;
+        	int y = head % 10; //Column;
+        	int x = head / 10; //row;
         	Direction direction = null;
 
 
@@ -65,7 +77,7 @@ public class SnakeController {
         	//set for validate snake tail
         	HashSet <Integer> headPositions = new HashSet<Integer>();
         	for(Snake i : snakes) {
-        		headPositions.add(i.getHead());
+        		headPositions.add(i.getTop());
         	}
         	headPositions.remove(head);
 
@@ -154,13 +166,9 @@ public class SnakeController {
 
             	int tailPos = pos - length;
 
-            	if (pos < 0) {
-    				continue;
-    			} else if (pos > 100) {
-            		continue;
-            	} else if (tailPos < 0) {
-    				continue;
-    			} else if (bannedPositions.contains(pos)){
+            	if (pos>=100|| pos<=1||tailPos<=1||tailPos>=100) {
+					continue;
+				} else if (bannedPositions.contains(pos)){
 
     				throw new snakeMoveException("Entity overlaps");
 
@@ -172,7 +180,9 @@ public class SnakeController {
     	    		break;
     			}
 
+
         	}
+
 
 		} catch (Exception e) {
 			// TODO: handle exception

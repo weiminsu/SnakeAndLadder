@@ -2,21 +2,18 @@ package model;
 
 public class SnakeGuard {
 	private int position;
-	private int duration;
-	
-	
-	public SnakeGuard(int position, int duration) {
+
+
+
+	public SnakeGuard(int position) {
 		this.position = position;
-		this.duration = duration;
+
 	}
-	
-	public int getPosition() {		
+
+	public int getPosition() {
 		return position;
 	}
 
-	
-	public int getDuration() {		
-		return duration;
-	}
+
 
 }

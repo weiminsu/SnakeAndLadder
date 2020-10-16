@@ -37,7 +37,7 @@ public class Admin {
 
     public void validateSnake(int head, int tail) throws Exception {
 
-        if (head > 100 || tail < 1) {
+        if (head >= 100 || tail <= 1) {
             throw new Exception("Snake out of board");
         }
 
@@ -55,7 +55,7 @@ public class Admin {
 
         if (head >= 81) {
             for (Snake s : snakes) {
-                int tempHead = s.getHead();
+                int tempHead = s.getTop();
                 if (tempHead >= 81 && tempHead <= 100) {
                     throw new Exception("Only one snake head can be in 81-100");
                 }
@@ -63,9 +63,9 @@ public class Admin {
 
         }
         for (Snake s : snakes) {
-            int snakeHead = s.getHead();
-            int snakeTail = s.getTail();
-            if (head == snakeTail || tail == snakeHead) {
+            int snakeHead = s.getTop();
+            int snakeTail = s.getBottom();
+            if (head == snakeTail || tail == snakeHead || head == snakeHead || tail == snakeTail) {
                 throw new Exception("The snake heads can not connected to others tails");
 
             }
@@ -106,8 +106,9 @@ public class Admin {
 
         }
         for (Snake s : snakes) {
-            int snakeHead = s.getHead();
-            if (top == snakeHead || bottom == snakeHead) {
+            int snakeHead = s.getTop();
+            int snakeTail = s.getBottom();
+            if (top == snakeHead || bottom == snakeHead || bottom == snakeTail || top == snakeTail) {
                 throw new Exception("The ladder cannot be connected to snakes head");
 
             }

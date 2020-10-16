@@ -7,10 +7,17 @@ import model.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.swing.RepaintManager;
 
 public class HumanController {
     private Board board;
+
+
     private UIWrapper uiWrapper;
     private boolean testMode;
 
@@ -18,6 +25,7 @@ public class HumanController {
         this.board = board;
         uiWrapper =  new UIWrapper(board);
         testMode = false;
+
     }
 
     public void enableTestMode() {
@@ -35,20 +43,78 @@ public class HumanController {
         return dice.roll();
     }
 
-    public int choosePiece() throws InvalidInputException {
-        while (true) {
-            String input = uiWrapper.promptForInput("Please choose the piece to move");
-            try {
-                int pieceToMove = Integer.valueOf(input)-1;
-                if (pieceToMove < 0 || pieceToMove >= board.getPieceCounts())
-                    throw new AssertionError();
-                return pieceToMove;
-            } catch (NumberFormatException | AssertionError e) {
-                uiWrapper.showErrorMessage(input + " is not a valid piece number!");
-                if(testMode) throw new InvalidInputException();
-            }
-        }
+
+    //if place snake guard;
+    public boolean ifPlaceGuard() throws SnakeGuardPlacementException{
+    	if (board.getSnakeGaurdCounts() < 3) {
+			int n = uiWrapper.showComfirmDialog("Do you want to place a snake guard");
+			if (n == 0) {
+				try {
+					//get user input;
+					String m = uiWrapper.promptForInput("Position: ").trim();
+					int position = Integer.parseInt(m);
+
+					//cant place guard over snake head;
+					HashSet<Integer> shp = board.getSnakeheadPos();
+					for(Integer i: shp){
+						if (position == i) {
+							throw new SnakeGuardPlacementException();
+						}
+					}
+					//cant place out of the board;
+					if (position <= 100 && position >= 1) {
+						SnakeGuard sg = new SnakeGuard(position);
+						board.add(sg);
+						return true;
+					} else {
+						throw new SnakeGuardPlacementException();
+					}
+
+				} catch (Exception e) {
+					uiWrapper.showErrorMessage("Something Wrong!");
+					return false;
+				}
+			}
+		}
+		return false;
+
     }
+
+    // 1 to kill snake; 0 to kill piece; 2 to nothing;
+    public void knightMove(int pieceNum) throws InvalidInputException{
+
+    	int n = chooseDestination(pieceNum);
+    	board.setPiece(pieceNum, n);
+
+
+    }
+
+    public void godMove(int piece){
+    	String n = uiWrapper.promptForInput("new location: ");
+    	try {
+    		int m= Integer.parseInt(n);
+    		board.getPiece(piece).setPosition(m);;
+		} catch (Exception e) {
+			uiWrapper.showErrorMessage("input integer");
+		}
+    	board.repaint();
+
+    }
+
+    //Stage 2 move;
+    public void movePieceByDice (int piece) throws BoundaryException {
+    	uiWrapper.showInfoMessage("Player " + piece + " throw dice");
+    	int diceValue = board.getDice().roll();
+    	try {
+    		board.getPiece(piece).move(diceValue);
+		} catch (BoundaryException e) {
+			uiWrapper.showErrorMessage("You go out of the board!");
+		}
+
+    	board.repaint();
+
+    }
+
 
     public int chooseDestination(int pieceNumber) throws InvalidInputException {
         while (true) {
@@ -69,7 +135,14 @@ public class HumanController {
     }
 
     private boolean validateDestination(int currentPosition, int destination) {
-        int i = currentPosition/10 + 1; // current row number
+    	int i;// current row number
+
+    	if (currentPosition%10 == 0) {
+    		 i = currentPosition/10;
+		} else {
+			 i = currentPosition/10 + 1;
+		}
+
         int j = i%2==0 ? i*10-currentPosition+1 : currentPosition%10; // current column number
         Set<Integer> validDest = new HashSet<>();
         for(int k=-2; k<=2; k++){
@@ -106,141 +179,95 @@ public class HumanController {
         return validDest.contains(destination);
     }
 
+    //Stage 3 validation;
+    public boolean stage3validatePieceLcations(){
+    	List <Piece> pieces = board.getPiece();
+    	List <Snake> snakes = board.getSnakes();
 
+    	int n = pieces.size();
+    	int m = snakes.size();
+    	List <Snake> gonnaremove = new ArrayList<Snake>();
+    	for(int i = 0; i< n; i++){
+    		for (int j = 0; j < m; j++) {
+				if (pieces.get(i).getPosition() == snakes.get(j).getBottom()) {
+					uiWrapper.showInfoMessage("Killed a snake!");
+					gonnaremove.add(snakes.get(j));
 
-    public void move(int pieceToMove, int n) throws IllegalArgumentException {
-        try {
-            board.movePiece(pieceToMove, n);
-        } catch (BoundaryException e) {
-            String errorMessage = "You can not move piece " + pieceToMove + " with " + n +
-                    " steps. It will be out of boundary.\nPlease select which piece to move again";
-            uiWrapper.showErrorMessage(errorMessage);
-            throw new IllegalArgumentException(errorMessage);
-        } catch (NoSuchPieceException e) {
-            String errorMessage = "Invalid piece!";
-            uiWrapper.showErrorMessage(errorMessage);
-            throw new IllegalArgumentException(errorMessage);
-        }
+				}
+
+				if (pieces.get(i).getPosition() == snakes.get(j).getTop()){
+
+					uiWrapper.showInfoMessage("Sorry, you lost!");
+					return false;
+				}
+			}
+    	}
+
+    	snakes.removeAll(gonnaremove);
+
+    	board.repaint();
+    	return true;
+
     }
 
-    public void moveTo(int pieceToMove, int destination) throws IllegalArgumentException {
-        try {
-            board.movePieceTo(pieceToMove, destination);
-        } catch (BoundaryException e) {
-            String errorMessage = "You can not move piece " + pieceToMove + " to  square " + destination +
-                    ". It is out of boundary.\nPlease select which piece to move again";
-            uiWrapper.showErrorMessage(errorMessage);
-            throw new IllegalArgumentException(errorMessage);
-        } catch (NoSuchPieceException e) {
-            String errorMessage = "Invalid piece!";
-            uiWrapper.showErrorMessage(errorMessage);
-            throw new IllegalArgumentException(errorMessage);
-        }
-    }
-
-    public Integer chooseSnakeGuardLocation() throws InvalidInputException {
-        while (true) {
-            String input = uiWrapper.promptForInput("Please choose the position to place a snake OOOuard");
-            if (input == null || input.isEmpty()) break;
-            try {
-                int location = Integer.valueOf(input);
-                if(!validateSnakeGuardLocation(location))
-                    throw new AssertionError();
-                return location;
-            } catch (NumberFormatException | AssertionError e) {
-                uiWrapper.showErrorMessage("You can not place a snake guard here.");
-                if(testMode) throw new InvalidInputException();
-            }
-        }
-        return -1;
-    }
-
-    private boolean validateSnakeGuardLocation(int location) {
-        Square s = board.getSquare(location);
-        return s == null || s.getSnake() == null;
-    }
-
-    public boolean placeSnakeGuard(int position) {
-        try {
-            SnakeGuard sg = new SnakeGuard(position,2);
-            board.add(sg);
-            return true;
-        } catch (SnakeGuardPlacementException e) {
-            uiWrapper.showErrorMessage("You can not place a snake guard here: " + e.getMessage());
-        }
-    	return false;
-    }
-
-
-
-
-
-    public String validatePieceLcations() throws BoundaryException{
+    //Stage 2 validation;
+    public String stage2validatePieceLcations() throws BoundaryException{
 
     	String message = "";
     	//extract all the snake head and ladder bottom position
     	HashSet<Integer> shp = board.getSnakeheadPos();
-    	HashSet<Integer> lbp = board.getLadderbottomPos();
+
 
     	//extract all the piece location
-    	ArrayList<Integer> pl = board.getPieceLocation();
+    	List<Integer> pl = board.getPieceLocation();
 
-    	Set <Integer> gonnaAddclimbLadderTime = new LinkedHashSet<Integer>();
+
+    	Set <Integer> gonnaParalyse = new LinkedHashSet<Integer>();
     	//compare overlapping
     	for (int i = 0; i < pl.size(); i++) {
     		//drop from snake
 			if (shp.contains(pl.get(i))) {
 				for (Snake j: board.getSnakes()) {
-					if (j.getHead() == pl.get(i)) {
+					if (j.getTop() == pl.get(i)) {
 						//move to j.getBottom()
-
-						board.movePieveFromAtoB(pl.get(i), j.getTail());
-						message += "Move piece " + pl.get(i) + " to " + j.getTail() + "\n";
+						gonnaParalyse.add(j.getBottom());
+						board.movePieveFromAtoB(pl.get(i), j.getBottom());
+						message += "Move piece " + pl.get(i) + " to " + j.getBottom() + "\n";
 					}
 				}
-
 			}
-    		//climb ladder
-			if (lbp.contains(pl.get(i))) {
-				for (Ladder m: board.getLadder()) {
-					if (m.getBottom() == pl.get(i)) {
-						//move to m.getTop()
-						gonnaAddclimbLadderTime.add(m.getTop());
-						board.movePieveFromAtoB(pl.get(i), m.getTop());
-						message += "Move piece " + pl.get(i) + " to " + m.getTop() + "\n";
-					}
 
-				}
-			}
+
 		}
 
-    	for(int n: gonnaAddclimbLadderTime){
+    	for(int n: gonnaParalyse){
     		board.getPieceByLocation(n);
     		for(Piece i: board.getPieceByLocation(n)){
-    			i.addLadderClimb();
+    			i.paralyse();
+
     		}
     	}
+
+    	//climb ladder
+
+    	for (int i = 0; i < board.getPiece().size(); i++) {
+			for (int j = 0; j < board.getLadder().size(); j++) {
+				int n = board.getPiece(i).getPosition();
+				int m = board.getLadder().get(j).getBottom();
+				if ( n == m ) {
+					board.setPiece(i, board.getLadder().get(j).getTop());
+
+					board.getPiece(i).addLadderClimb();
+				}
+			}
+
+		}
+
+
 
 
     	return message;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
