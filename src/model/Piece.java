@@ -7,11 +7,17 @@ public class Piece {
 	private int position;
 	private int paralyseDuration;
 	private int ladderClimb;
+	private int index;
 
-	public Piece() {
+	public int getIndex() {
+		return index;
+	}
+
+	public Piece(int index) {
 		position = 1;
 		paralyseDuration = 0;
 		ladderClimb = 0;
+		this.index = index;
 	}
 
 	public int getLadderClimb() {
@@ -43,18 +49,18 @@ public class Piece {
 	public void paralyse() {
 		paralyseDuration = 2;
 	}
-	
 
-	
-	
+
+
+
 	public boolean isParalyse() {
 		if (paralyseDuration != 0) {
 			return true;
 		} else {
 			return false;
 		}
-		
-	
+
+
 	}
 
 	public void decrementParalyseDuration(){

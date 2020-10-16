@@ -5,5 +5,5 @@ public enum Direction {
 	topRight,
 	bottomLeft,
 	bottomRight
-	
+
 }

@@ -3,12 +3,11 @@ package model;
 public class Snake extends Entity
 {
 
-   public Snake(int h, int t)
+   public Snake(int top, int bottom)
    {
-       top = h;
-       bottom = t;
+       this.top = top;
+       this.bottom = bottom;
    }
-
 
    public void setHeadPosition(int pos) {
 	   top = pos;

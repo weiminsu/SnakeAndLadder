@@ -17,7 +17,9 @@ import javax.swing.RepaintManager;
 public class HumanController {
     private Board board;
 
-
+    private List <Piece> pieces;
+    private List <Snake> snakes;
+    private List <Ladder> ladders;
     private UIWrapper uiWrapper;
     private boolean testMode;
 
@@ -25,6 +27,9 @@ public class HumanController {
         this.board = board;
         uiWrapper =  new UIWrapper(board);
         testMode = false;
+        pieces = board.getPiece();
+    	snakes = board.getSnakes();
+    	ladders = board.getLadder();
 
     }
 
@@ -55,12 +60,13 @@ public class HumanController {
 					int position = Integer.parseInt(m);
 
 					//cant place guard over snake head;
-					HashSet<Integer> shp = board.getSnakeheadPos();
-					for(Integer i: shp){
-						if (position == i) {
+					for(Snake i: snakes){
+						if (position == i.getTop()) {
 							throw new SnakeGuardPlacementException();
 						}
 					}
+
+
 					//cant place out of the board;
 					if (position <= 100 && position >= 1) {
 						SnakeGuard sg = new SnakeGuard(position);
@@ -103,7 +109,7 @@ public class HumanController {
 
     //Stage 2 move;
     public void movePieceByDice (int piece) throws BoundaryException {
-    	uiWrapper.showInfoMessage("Player " + piece + " throw dice");
+    	uiWrapper.showInfoMessage("Player " +  (piece +1) + " throw dice");
     	int diceValue = board.getDice().roll();
     	try {
     		board.getPiece(piece).move(diceValue);
@@ -181,28 +187,23 @@ public class HumanController {
 
     //Stage 3 validation;
     public boolean stage3validatePieceLcations(){
-    	List <Piece> pieces = board.getPiece();
-    	List <Snake> snakes = board.getSnakes();
 
-    	int n = pieces.size();
-    	int m = snakes.size();
+
     	List <Snake> gonnaremove = new ArrayList<Snake>();
-    	for(int i = 0; i< n; i++){
-    		for (int j = 0; j < m; j++) {
-				if (pieces.get(i).getPosition() == snakes.get(j).getBottom()) {
-					uiWrapper.showInfoMessage("Killed a snake!");
-					gonnaremove.add(snakes.get(j));
 
+    	for(Piece i: pieces){
+    		for(Snake j: snakes){
+    			if (i.getPosition() == j.getBottom()) {
+    				uiWrapper.showInfoMessage("Killed a snake!");
+					gonnaremove.add(j);
 				}
 
-				if (pieces.get(i).getPosition() == snakes.get(j).getTop()){
-
-					uiWrapper.showInfoMessage("Sorry, you lost!");
+    			if (i.getPosition() == j.getTop()) {
+    				uiWrapper.showInfoMessage("Sorry, you lost!");
 					return false;
 				}
-			}
+    		}
     	}
-
     	snakes.removeAll(gonnaremove);
 
     	board.repaint();
@@ -211,62 +212,35 @@ public class HumanController {
     }
 
     //Stage 2 validation;
-    public String stage2validatePieceLcations() throws BoundaryException{
-
-    	String message = "";
-    	//extract all the snake head and ladder bottom position
-    	HashSet<Integer> shp = board.getSnakeheadPos();
+    public void stage2validatePieceLcations() throws BoundaryException{
 
 
-    	//extract all the piece location
-    	List<Integer> pl = board.getPieceLocation();
-
-
-    	Set <Integer> gonnaParalyse = new LinkedHashSet<Integer>();
-    	//compare overlapping
-    	for (int i = 0; i < pl.size(); i++) {
-    		//drop from snake
-			if (shp.contains(pl.get(i))) {
-				for (Snake j: board.getSnakes()) {
-					if (j.getTop() == pl.get(i)) {
-						//move to j.getBottom()
-						gonnaParalyse.add(j.getBottom());
-						board.movePieveFromAtoB(pl.get(i), j.getBottom());
-						message += "Move piece " + pl.get(i) + " to " + j.getBottom() + "\n";
-					}
+    	//drop snake
+    	for(Piece i: pieces){
+    		for(Snake j: snakes){
+    			if (i.getPosition() == j.getTop()) {
+					i.setPosition(j.getBottom());
+					i.paralyse();
+					board.addMessage("Piece " + (i.getIndex()+1) + " drop to " + i.getPosition());
+					board.repaint();
 				}
-			}
-
-
-		}
-
-    	for(int n: gonnaParalyse){
-    		board.getPieceByLocation(n);
-    		for(Piece i: board.getPieceByLocation(n)){
-    			i.paralyse();
-
     		}
     	}
 
+
     	//climb ladder
-
-    	for (int i = 0; i < board.getPiece().size(); i++) {
-			for (int j = 0; j < board.getLadder().size(); j++) {
-				int n = board.getPiece(i).getPosition();
-				int m = board.getLadder().get(j).getBottom();
-				if ( n == m ) {
-					board.setPiece(i, board.getLadder().get(j).getTop());
-
-					board.getPiece(i).addLadderClimb();
-				}
-			}
-
-		}
+    	for(Piece i: pieces){
+    		for(Ladder j: ladders){
+    			if (i.getPosition() == j.getBottom()){
+    				i.setPosition(j.getTop());
+    				board.addMessage("Piece " + (i.getIndex()+1) + " clim to " + i.getPosition());
+    				board.repaint();
+    				i.addLadderClimb();
+    			}
+    		}
+    	}
 
 
-
-
-    	return message;
     }
 
 

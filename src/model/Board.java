@@ -31,7 +31,7 @@ public class Board extends JPanel implements Runnable
    private List <Snake> snakes;
    private List <Ladder> ladders;
    private List<SnakeGuard> snakeGuards;
-   private List<Square> squares;
+
 
 
    public void addMessage(String line)
@@ -141,16 +141,12 @@ public class Board extends JPanel implements Runnable
       ladders = new ArrayList<Ladder>();
       pieces = new ArrayList<Piece>();
       snakeGuards = new ArrayList<SnakeGuard>();
-      squares = new ArrayList<>();
-      for (int i=0; i<100; i++) {
-          squares.add(new Square(i));
-      }
+
 
       for (int i = 0; i < n; i++) {
-          Piece p = new Piece();
+          Piece p = new Piece(i);
           pieces.add(p);
 
-          squares.get(0).addPiece(p);
       }
 
 
@@ -325,13 +321,13 @@ public class Board extends JPanel implements Runnable
            else
               g.setColor(Color.ORANGE);
 
-           //for (int k=0; k<snakeGuards.size(); k++)
               g.fillRect(XMARGIN + 40*i,YMARGIN+40*j, 40,40);
 
 	     }
 
       }
       g.setColor(Color.BLACK);
+
  	  for (int k =0; k<snakeGuards.size(); k++)
  	  {
  		 int num = snakeGuards.get(k).getPosition();
@@ -341,6 +337,7 @@ public class Board extends JPanel implements Runnable
          g.fillRect(getX(num) -10 ,getY(num)-10,40,40);
    	  }
       g.setColor(Color.BLACK);
+
       for ( int i=0; i<100; i++)
          g.drawString(""+(i+1), getX(i+1),getY(i+1)+20);
       for (int i=0; i<snakes.size(); i++)
@@ -372,19 +369,12 @@ public class Board extends JPanel implements Runnable
 	   return snakes.size();
    }
 
-   public int getLadderCounts() {
-
-	   return ladders.size();
-   }
 
    public int getSnakeGaurdCounts() {
 
 	   return snakeGuards.size();
    }
 
-   public int getPieceCounts() {
-       return pieces.size();
-   }
 
    public List<Snake> getSnakes(){
 	   return snakes;
@@ -427,17 +417,20 @@ public class Board extends JPanel implements Runnable
 
    }
 
+
    public void clearLadder (){
 	   ladders.clear();
 	   repaint();
 
    }
 
+
    public void clearSnakeGaurd(){
 	   snakeGuards.clear();
 	   repaint();
 
    }
+
 
    public HashSet <Integer> getCriticalPosition() {
 
@@ -461,77 +454,10 @@ public class Board extends JPanel implements Runnable
 
    }
 
-
-   public HashSet <Integer> getSnakeheadPos(){
-
-	   HashSet <Integer> sp = new HashSet <Integer>();
-	   for (Snake i: snakes) {
-		   sp.add(i.getTop());
-
-	   }
-
-	   return sp;
-
-   }
-
-
-   public ArrayList<Integer> getPieceLocation(){
-
-	   ArrayList<Integer> pl = new ArrayList<Integer>();
-
-	   for(Piece i: pieces){
-		   pl.add(i.getPosition());
-	   }
-
-	   return pl;
-
-   }
-
-
    public Piece getPiece(int piece) {
        if (piece<0 || piece >= pieces.size())
            return null;
        return pieces.get(piece);
-   }
-
-
-   public Square getSquare(int pos) {
-       if (pos < 0 || pos >= 100) {
-           return null;
-       }
-       return squares.get(pos);
-   }
-
-
-   public void movePieveFromAtoB (int a, int b) throws BoundaryException {
-
-	   for (int i = 0; i < pieces.size(); i++) {
-		   if (pieces.get(i).getPosition() == a) {
-			   setPiece(i+1, b);
-		   }
-	   }
-
-
-
-	   repaint();
-
-
-   }
-
-   public List <Piece> getPieceByLocation(int pos){
-
-	   List <Piece> m = new ArrayList<Piece>();
-
-	   for(Piece i: pieces){
-		   if (i.getPosition() == pos) {
-			   m.add(i);
-		   }
-
-	   }
-
-
-	   return m;
-
    }
 
 

@@ -8,23 +8,14 @@ import model.Snake;
 
 public class Admin {
     private Board board;
-    private IUserInput input;
     private ArrayList<Snake> snakes = new ArrayList<Snake>();
     private ArrayList<Ladder> ladders = new ArrayList<Ladder>();
 
 
-    public Admin(Board board, IUserInput input) {
+    public Admin(Board board, UserInput input) {
         this.board = board;
-        this.input = input;
     }
 
-
-    // Create one new snake
-    public void putSnake() throws Exception {
-        int head = input.getInt("Please enter the head position", 1, 100);
-        int tail = input.getInt("Please enter the tail position", 1, 100);
-        doAddSnake(head, tail);
-    }
 
     public void doAddSnake(int head, int tail) throws Exception {
 
@@ -73,12 +64,6 @@ public class Admin {
     }
 
 
-    public void putLadders() throws Exception {
-        int head = input.getInt("Please enter the head position", 1, 100);
-        int tail = input.getInt("Please enter the tail position", 1, 100);
-        doAddLadder(head, tail);
-    }
-
     public void doAddLadder(int top, int bottom) throws Exception {
         validateLadder(top, bottom);
         Ladder ladder = new Ladder(top, bottom);
@@ -123,15 +108,4 @@ public class Admin {
         }
     }
 
-
-    public void setUpBoard() throws Exception {
-        input.plainMessage("please input 5 snakes");
-        for (int i = 0; i < 5; i++) {
-            putSnake();
-        }
-        input.plainMessage("please input 5 Ladders");
-        for (int i = 0; i < 5; i++) {
-            putLadders();
-        }
-    }
 }

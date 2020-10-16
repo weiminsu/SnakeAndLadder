@@ -3,11 +3,10 @@ package model;
 public class Ladder extends Entity
 {
 
-   public Ladder(int t, int b)
+   public Ladder(int top, int bottom)
    {
-       bottom = b;
-       top = t;
+       this.bottom = bottom;
+       this.top = top;
    }
-
 
 }

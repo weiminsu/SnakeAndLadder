@@ -15,7 +15,7 @@ public class SnakeController {
 
 	private Board board;
 
-	private List <Snake> snakes = new ArrayList<Snake>();
+	private List <Snake> snakes;
 
 	public SnakeController(Board board){
         this.board = board;
