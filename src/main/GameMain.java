@@ -184,6 +184,7 @@ public class GameMain implements UserInput  {
 
     	if (ifwin == true) {
 			uiWrapper.showInfoMessage("Stage 2 wins!");
+			board.clearMessages();
 			rounds = 0;
 			stage = 3;
 		} else {
@@ -251,6 +252,9 @@ public class GameMain implements UserInput  {
 				save();
 				System.exit(100);
 			}
+
+    		board.clearMessages();
+    		board.addMessage("Round " + (round + 1));
 
 
     		for (int j = 0; j < pieces.size(); j++) {
