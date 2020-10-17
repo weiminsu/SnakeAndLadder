@@ -278,29 +278,19 @@ public class GameMain implements UserInput  {
 
 				humanController.stage3validatePieceLcations();
 
+				if (board.getSnakeCounts() == 0) {
+					uiWrapper.showInfoMessage("Conguatraltion! you win!");
+					ObjectOutputStream snakegardsave = new ObjectOutputStream(new FileOutputStream("snakegard.ser"));
+			    	ObjectOutputStream snakesave = new ObjectOutputStream(new FileOutputStream("snake.ser"));
+			    	ObjectOutputStream piecesave = new ObjectOutputStream(new FileOutputStream("piece.ser"));
+			    	ObjectOutputStream laddersave = new ObjectOutputStream(new FileOutputStream("ladder.ser"));
+			    	ObjectOutputStream roundsave = new ObjectOutputStream(new FileOutputStream("rounds.ser"));
+			    	ObjectOutputStream stagesave = new ObjectOutputStream(new FileOutputStream("stage.ser"));
+					System.exit(0);
+				}
+
 			}
-    		if (board.getSnakeCounts() == 0) {
-				uiWrapper.showInfoMessage("Conguatraltion! you win!");
-				ObjectOutputStream snakegardsave = new ObjectOutputStream(new FileOutputStream("snakegard.ser"));
 
-
-		    	ObjectOutputStream snakesave = new ObjectOutputStream(new FileOutputStream("snake.ser"));
-
-
-		    	ObjectOutputStream piecesave = new ObjectOutputStream(new FileOutputStream("piece.ser"));
-
-
-		    	ObjectOutputStream laddersave = new ObjectOutputStream(new FileOutputStream("ladder.ser"));
-
-
-		    	ObjectOutputStream roundsave = new ObjectOutputStream(new FileOutputStream("rounds.ser"));
-
-
-		    	ObjectOutputStream stagesave = new ObjectOutputStream(new FileOutputStream("stage.ser"));
-
-
-				System.exit(0);
-			}
 
     		snakeController.moveall();
     		humanController.stage3validatePieceLcations();
