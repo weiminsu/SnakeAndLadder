@@ -340,7 +340,7 @@ public class GameMain implements UserInput  {
 
 
 		try {
-			String[] options = {"OK", "Retrive load"};
+			String[] options = {"OK", "Load Game"};
 			int x = JOptionPane.showOptionDialog(null, "Do you want to start a new game?",
 	                "Information",
 	                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
