@@ -177,7 +177,7 @@ public class GameMain implements UserInput  {
 			}
     		//snake turn;
     		uiWrapper.showInfoMessage("Snakes move");
-    		snakeController.moveall();
+    		snakeController.moveSnake();
     		humanController.stage2validatePieceLcations();
 
     	}
@@ -285,7 +285,7 @@ public class GameMain implements UserInput  {
 			}
 
 
-    		snakeController.moveall();
+    		snakeController.moveSnake();
     		humanController.stage3validatePieceLcations();
 
 

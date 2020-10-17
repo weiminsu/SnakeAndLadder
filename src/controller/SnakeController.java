@@ -23,10 +23,6 @@ public class SnakeController {
 		snakes = board.getSnakes();
 	}
 
-	public boolean SnakeMove() throws IllegalArgumentException {
-
-		return true;
-	}
 
 	public static int getRondomNumBetweenRange(int min, int max) {
 
@@ -35,15 +31,8 @@ public class SnakeController {
 		return x;
 	}
 
-	public Snake selectSnakeToMove() {
-		int snakeCount = board.getSnakeCounts();
 
-		int snakeNo = getRondomNumBetweenRange(0, snakeCount - 1);
-
-		return snakes.get(snakeNo);
-	}
-
-	public void moveall() throws snakeMoveException {
+	public void moveSnake() throws snakeMoveException {
 
 		for (Snake s : snakes) {
 			snakeRandomMove(s);
@@ -82,7 +71,7 @@ public class SnakeController {
 			while (true) {
 
 				// random direction
-				int directionNo = getRondomNumBetweenRange(0, 3);
+				int directionNo =  getRondomNumBetweenRange(0, 3);
 
 				direction = Direction.values()[directionNo];
 
