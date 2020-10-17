@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -20,7 +21,11 @@ import exception.*;
 
 public class Board extends JPanel implements Runnable
 {
-   private static JFrame frame = new JFrame("SEF Assignment");
+   /**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+	private static JFrame frame = new JFrame("SEF Assignment");
    private double factor = 0.2;
    private int XMARGIN = 20;
    private int YMARGIN = 20;
@@ -66,11 +71,6 @@ public class Board extends JPanel implements Runnable
 
 		if (snakes.size() < 10) {
 
-			for (Snake i : snakes) {
-				if (s.getTop() == i.getTop()) {
-					throw new SnakePlacementException();
-				}
-			}
 			snakes.add(s);
 
 		} else {
@@ -84,11 +84,7 @@ public class Board extends JPanel implements Runnable
 
 		if (ladders.size() < 10) {
 
-			for (Ladder i : ladders) {
-				if (l.getBottom() == i.getBottom()) {
-					throw new LadderPlacementException();
-				}
-			}
+
 			ladders.add(l);
 
 		} else {
@@ -105,8 +101,6 @@ public class Board extends JPanel implements Runnable
 				if (sg.getPosition() == i.getPosition()) {
 					throw new SnakeGuardPlacementException();
 				}
-
-
 			}
 			snakeGuards.add(sg);
 			repaint();
@@ -120,6 +114,39 @@ public class Board extends JPanel implements Runnable
    {
 	   this(2);
    }
+
+   public Board(List <Piece> p, List<Snake>s,List<SnakeGuard>sg, List <Ladder>l) throws SnakePlacementException, LadderPlacementException, SnakeGuardPlacementException{
+	   Container contentPane = frame.getContentPane();
+	      contentPane.setLayout(new BorderLayout());
+
+	      frame.getContentPane().add(this,BorderLayout.CENTER);
+	      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	      frame.setSize(640,520);
+	      frame.setVisible(true);
+	      new Thread(this).start();
+
+	      snakes = new ArrayList<Snake>();
+	      ladders = new ArrayList<Ladder>();
+	      pieces = new ArrayList<Piece>();
+	      snakeGuards = new ArrayList<SnakeGuard>();
+
+	      for(Snake i: s){
+	    	  this.add(i);
+	      }
+	      for(Ladder i: l){
+	    	  this.add(i);
+	      }
+	      for(SnakeGuard i: sg){
+	    	  this.add(i);
+	      }
+
+	      pieces = p;
+
+	      dice = new Dice(this);
+	      repaint();
+
+   }
+
 
    public Board(int n)
    {

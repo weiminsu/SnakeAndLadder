@@ -10,11 +10,20 @@ import exception.*;
 
 import javax.swing.*;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 
-public class GameMain implements UserInput {
+public class GameMain implements UserInput  {
     private HumanController humanController;
     private Board board;
     private SnakeController snakeController;
@@ -22,6 +31,10 @@ public class GameMain implements UserInput {
     static private int stage;
     static boolean godMode = false;
     private UIWrapper uiWrapper;
+    private static int rounds;
+
+
+
 
     public GameMain() {
 
@@ -33,7 +46,19 @@ public class GameMain implements UserInput {
         this.admin = new Admin(this.board, this);
         stage = 1;
         uiWrapper = new UIWrapper(board);
+        rounds = 0;
+
     }
+
+    public GameMain(List <Piece> p, List<Snake>s,List<SnakeGuard>sg, List <Ladder>l) throws SnakePlacementException, LadderPlacementException, SnakeGuardPlacementException{
+    	board = new Board(p, s, sg, l);
+    	this.humanController = new HumanController(this.board);
+        this.snakeController = new SnakeController(this.board);
+        this.admin = new Admin(this.board, this);
+        uiWrapper = new UIWrapper(board);
+
+    }
+
 
 
     public void startGame() throws InvalidInputException {
@@ -76,7 +101,7 @@ public class GameMain implements UserInput {
         stage = 2;
     }
 
-    public void secondStage() throws SnakeGuardPlacementException, BoundaryException, snakeMoveException  {
+    public void secondStage() throws SnakeGuardPlacementException, BoundaryException, snakeMoveException, FileNotFoundException, IOException  {
     	Boolean ifwin = false;
     	List <Piece> pieces = board.getPiece();
     	String code = uiWrapper.promptForInput("Developer code: ");
@@ -90,15 +115,20 @@ public class GameMain implements UserInput {
 
 
     	//loop 50 rounds;
-    	for (int rounds = 0; rounds<50; rounds++){
+
+    	for (int round= rounds; round<=50; round++){
     		//piece turn;
-    		int quit = uiWrapper.showOptionMessage("Round " + (rounds + 1));
-    		if (quit ==1) {
-    			uiWrapper.showInfoMessage("Thank you!");
-				return;
+    		int quit = uiWrapper.showOptionMessage("Round " + (round + 1));
+
+    		if (quit == 1) {
+    			rounds = round;
+    			uiWrapper.showInfoMessage("Game saved!");
+				save();
+				System.exit(100);
 			}
+
     		board.clearMessages();
-    		board.addMessage("Round " + (rounds + 1));
+    		board.addMessage("Round " + (round + 1));
 
     		for (int i = 0; i < pieces.size(); i++) {
     			board.addMessage("Piece " + (i+1) + " climbed: " + pieces.get(i).getLadderClimb());
@@ -160,6 +190,7 @@ public class GameMain implements UserInput {
 
     	if (ifwin == true) {
 			uiWrapper.showInfoMessage("Stage 2 wins!");
+			rounds = 0;
 			stage = 3;
 		} else {
 			uiWrapper.showInfoMessage("Sorry you lost!");
@@ -170,11 +201,44 @@ public class GameMain implements UserInput {
     }
 
 
-    public void thirdStage() throws InvalidInputException, snakeMoveException{
+    private void save() throws FileNotFoundException, IOException {
+
+    	ObjectOutputStream snakegardsave = new ObjectOutputStream(new FileOutputStream("snakegard.ser"));
+    	snakegardsave.writeObject(board.getSnakeGuard());
+
+    	ObjectOutputStream snakesave = new ObjectOutputStream(new FileOutputStream("snake.ser"));
+    	snakesave.writeObject(board.getSnakes());
+
+    	ObjectOutputStream piecesave = new ObjectOutputStream(new FileOutputStream("piece.ser"));
+    	piecesave.writeObject(board.getPiece());
+
+    	ObjectOutputStream laddersave = new ObjectOutputStream(new FileOutputStream("ladder.ser"));
+    	laddersave.writeObject(board.getLadder());
+
+    	ObjectOutputStream roundsave = new ObjectOutputStream(new FileOutputStream("rounds.ser"));
+    	roundsave.writeObject(rounds);
+
+    	ObjectOutputStream stagesave = new ObjectOutputStream(new FileOutputStream("stage.ser"));
+    	stagesave.writeObject(stage);
+
+
+    	roundsave.close();
+    	stagesave.close();
+    	piecesave.close();
+    	laddersave.close();
+    	snakegardsave.close();
+    	snakesave.close();
+
+
+
+	}
+
+
+	public void thirdStage() throws InvalidInputException, snakeMoveException, Exception, IOException{
     	board.clearLadder();
     	board.clearSnakeGaurd();
-    	String code = uiWrapper.promptForInput("Developer code: ").trim();
-    	if (code.equals(null)) {
+    	String code = uiWrapper.promptForInput("Developer code: ");
+    	if (code == null) {
     		godMode = false;
 		} else if (code.equals("123")) {
 			godMode = true;
@@ -184,12 +248,19 @@ public class GameMain implements UserInput {
 
 
     	List<Piece> pieces = board.getPiece();
-    	for (int rounds = 0; rounds < 20; rounds++) {
-    		int quit = uiWrapper.showOptionMessage("Round " + (rounds + 1));
-    		if (quit ==1) {
-    			uiWrapper.showInfoMessage("Thank you!");
-				return;
+
+    	for ( int round = rounds; round < 20; round++) {
+
+    		int quit = uiWrapper.showOptionMessage("Round " + (round + 1));
+
+    		if (quit == 1) {
+    			rounds = round;
+    			uiWrapper.showInfoMessage("Game saved!");
+				save();
+				System.exit(100);
 			}
+
+
     		for (int j = 0; j < pieces.size(); j++) {
     			uiWrapper.showInfoMessage("Player " + (j + 1) + "'s turn.");
     			if (godMode == true) {
@@ -207,6 +278,28 @@ public class GameMain implements UserInput {
 
 				humanController.stage3validatePieceLcations();
 
+			}
+    		if (board.getSnakeCounts() == 0) {
+				uiWrapper.showInfoMessage("Conguatraltion! you win!");
+				ObjectOutputStream snakegardsave = new ObjectOutputStream(new FileOutputStream("snakegard.ser"));
+
+
+		    	ObjectOutputStream snakesave = new ObjectOutputStream(new FileOutputStream("snake.ser"));
+
+
+		    	ObjectOutputStream piecesave = new ObjectOutputStream(new FileOutputStream("piece.ser"));
+
+
+		    	ObjectOutputStream laddersave = new ObjectOutputStream(new FileOutputStream("ladder.ser"));
+
+
+		    	ObjectOutputStream roundsave = new ObjectOutputStream(new FileOutputStream("rounds.ser"));
+
+
+		    	ObjectOutputStream stagesave = new ObjectOutputStream(new FileOutputStream("stage.ser"));
+
+
+				System.exit(0);
 			}
 
     		snakeController.moveall();
@@ -256,16 +349,72 @@ public class GameMain implements UserInput {
                 JOptionPane.PLAIN_MESSAGE);
     }
 
+
+
     // This method constructs a SLGame object and calls its control method
     public static void main(String args[]) throws Exception {
-        GameMain gameMain = new GameMain();
-        gameMain.startGame();
-        gameMain.secondStage();
 
-        if (stage == 3) {
-        	gameMain.thirdStage();
+
+		try {
+			String[] options = {"OK", "No"};
+			int x = JOptionPane.showOptionDialog(null, "Do you want to start a new game?",
+	                "Information",
+	                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+			if (x==0) {
+
+				throw new Exception();
+			}
+
+			ObjectInputStream in1 = new ObjectInputStream
+	                (new FileInputStream("snakegard.ser"));
+	    	ObjectInputStream in2 = new ObjectInputStream
+	                (new FileInputStream("snake.ser"));
+	    	ObjectInputStream in3 = new ObjectInputStream
+	                (new FileInputStream("piece.ser"));
+	    	ObjectInputStream in4 = new ObjectInputStream
+	                (new FileInputStream("ladder.ser"));
+	    	ObjectInputStream in5 = new ObjectInputStream
+	                (new FileInputStream("rounds.ser"));
+	    	ObjectInputStream in6 = new ObjectInputStream
+			        (new FileInputStream("stage.ser"));
+	    	List<SnakeGuard>sg = (List<SnakeGuard>) in1.readObject();
+	    	List<Snake>s = (List<Snake>) in2.readObject();
+	    	List<Piece>p = (List<Piece>) in3.readObject();
+	    	List<Ladder>l = (List<Ladder>) in4.readObject();
+	    	rounds = (Integer) in5.readObject();
+	    	stage = (Integer) in6.readObject();
+	    	GameMain gameMain = new GameMain(p, s, sg, l);
+
+	    	if (stage == 2) {
+	    		gameMain.secondStage();
+			}
+
+	        if (stage == 3) {
+	        	gameMain.thirdStage();
+			}
+
+	        System.exit(0);
+
+		} catch (Exception e){
+			System.err.println(e);
+			e.printStackTrace();
+			GameMain gameMain = new GameMain();
+	        gameMain.startGame();
+	        gameMain.secondStage();
+
+	        if (stage == 3) {
+	        	gameMain.thirdStage();
+			}
+
+	        System.exit(0);
+
 		}
 
-        System.exit(0);
+
+
+
+
+
     }
 }

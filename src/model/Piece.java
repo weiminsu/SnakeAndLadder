@@ -1,9 +1,15 @@
 package model;
 
+import java.io.Serializable;
+
 import exception.BoundaryException;
 
-public class Piece {
+public class Piece implements Serializable{
 
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 	private int position;
 	private int paralyseDuration;
 	private int ladderClimb;

@@ -1,9 +1,16 @@
 package model;
 
-public class Snake extends Entity
+import java.io.Serializable;
+
+public class Snake extends Entity implements Serializable
 {
 
-   public Snake(int top, int bottom)
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+public Snake(int top, int bottom)
    {
        this.top = top;
        this.bottom = bottom;

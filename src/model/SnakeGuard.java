@@ -1,6 +1,12 @@
 package model;
 
-public class SnakeGuard {
+import java.io.Serializable;
+
+public class SnakeGuard  implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int position;
 
 

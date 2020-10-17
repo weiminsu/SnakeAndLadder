@@ -72,11 +72,11 @@ public class HumanController {
 					}
 
 				} catch (SnakeGuardPlacementException e){
-					uiWrapper.showErrorMessage("Cant place over snakes!");
-					return false;
+					uiWrapper.showErrorMessage("Cant place over snakes or out of board!");
+					ifPlaceGuard();
 				} catch (Exception e) {
 					uiWrapper.showErrorMessage("Invalid input!");
-					return false;
+					ifPlaceGuard();
 				}
 			}
 		}
@@ -100,6 +100,7 @@ public class HumanController {
     		board.getPiece(piece).setPosition(m);;
 		} catch (Exception e) {
 			uiWrapper.showErrorMessage("input integer");
+			godMove(piece);
 		}
     	board.repaint();
 
