@@ -356,6 +356,10 @@ public class GameMain implements UserInput  {
 				throw new Exception();
 			}
 
+			if (x==-1) {
+				System.exit(0);
+			}
+
 			ObjectInputStream in1 = new ObjectInputStream
 	                (new FileInputStream("snakegard.ser"));
 	    	ObjectInputStream in2 = new ObjectInputStream
