@@ -60,8 +60,6 @@ public class HumanController {
 							throw new SnakeGuardPlacementException();
 						}
 					}
-
-
 					//cant place out of the board;
 					if (position <= 100 && position >= 1) {
 						SnakeGuard sg = new SnakeGuard(position);
