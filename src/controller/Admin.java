@@ -22,7 +22,6 @@ public class Admin {
 
 		validateSnake(head, tail);
 		Snake snake = new Snake(head, tail);
-		snakes.add(snake);
 		board.add(snake);
 
 	}
@@ -67,7 +66,6 @@ public class Admin {
 	public void doAddLadder(int top, int bottom) throws Exception {
 		validateLadder(top, bottom);
 		Ladder ladder = new Ladder(top, bottom);
-		ladders.add(ladder);
 		board.add(ladder);
 	}
 

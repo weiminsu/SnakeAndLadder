@@ -110,7 +110,7 @@ public class GameMain implements UserInput  {
 
     	//loop 50 rounds;
 
-    	for (int round= rounds; round<=50; round++){
+    	for (int round = rounds; round<50; round++){
     		//piece turn;
     		int quit = uiWrapper.showOptionMessage("Round " + (round + 1));
 
@@ -385,8 +385,7 @@ public class GameMain implements UserInput  {
 	        System.exit(0);
 
 		} catch (Exception e){
-			System.err.println(e);
-			e.printStackTrace();
+
 			GameMain gameMain = new GameMain();
 	        gameMain.setUp();
 	        gameMain.secondStage();
