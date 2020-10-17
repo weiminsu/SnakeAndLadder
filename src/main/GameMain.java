@@ -98,15 +98,6 @@ public class GameMain implements UserInput  {
     public void secondStage() throws SnakeGuardPlacementException, BoundaryException, snakeMoveException, FileNotFoundException, IOException  {
     	Boolean ifwin = false;
     	List <Piece> pieces = board.getPiece();
-    	String code = uiWrapper.promptForInput("Developer code: ");
-    	if (code == (null)) {
-    		godMode = false;
-		} else if (code.equals("123")) {
-			godMode = true;
-		} else {
-			godMode = false;
-		}
-
 
     	//loop 50 rounds;
 
@@ -230,15 +221,6 @@ public class GameMain implements UserInput  {
 	public void thirdStage() throws InvalidInputException, snakeMoveException, Exception, IOException{
     	board.clearLadder();
     	board.clearSnakeGaurd();
-    	String code = uiWrapper.promptForInput("Developer code: ");
-    	if (code == null) {
-    		godMode = false;
-		} else if (code.equals("123")) {
-			godMode = true;
-		} else {
-			godMode = false;
-		}
-
 
     	List<Piece> pieces = board.getPiece();
 
@@ -355,6 +337,17 @@ public class GameMain implements UserInput  {
 
 
 		try {
+
+			String code = JOptionPane.showInputDialog(null, "Developer code: ");
+
+	    	if (code == null) {
+	    		godMode = false;
+			} else if (code.equals("123")) {
+				godMode = true;
+			} else {
+				godMode = false;
+			}
+
 			String[] options = {"OK", "Load Game"};
 			int x = JOptionPane.showOptionDialog(null, "Do you want to start a new game?",
 	                "Information",
