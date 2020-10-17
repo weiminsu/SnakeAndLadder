@@ -59,6 +59,13 @@ public class Piece implements Serializable{
 
 
 
+	public void decrementParalyseDuration(){
+		if (paralyseDuration == 0) {
+			return;
+		}
+		paralyseDuration--;
+	}
+
 	public boolean isParalyse() {
 		if (paralyseDuration != 0) {
 			return true;
@@ -67,13 +74,6 @@ public class Piece implements Serializable{
 		}
 
 
-	}
-
-	public void decrementParalyseDuration(){
-		if (paralyseDuration == 0) {
-			return;
-		}
-		paralyseDuration--;
 	}
 
 

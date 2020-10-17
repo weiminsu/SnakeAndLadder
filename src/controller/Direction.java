@@ -1,9 +1,6 @@
 package controller;
 
 public enum Direction {
-	topLeft,
-	topRight,
-	bottomLeft,
-	bottomRight
+	topLeft, topRight, bottomLeft, bottomRight
 
 }

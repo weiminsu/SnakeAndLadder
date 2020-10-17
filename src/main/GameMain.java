@@ -60,12 +60,6 @@ public class GameMain implements UserInput  {
     }
 
 
-
-    public void startGame() throws InvalidInputException {
-        setUp();
-
-    }
-
     public void setUp() {
         // placeholder
         for (int i = 0; i < 5; i++) {
@@ -394,7 +388,7 @@ public class GameMain implements UserInput  {
 			System.err.println(e);
 			e.printStackTrace();
 			GameMain gameMain = new GameMain();
-	        gameMain.startGame();
+	        gameMain.setUp();
 	        gameMain.secondStage();
 
 	        if (stage == 3) {

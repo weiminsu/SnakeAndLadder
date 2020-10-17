@@ -16,189 +16,172 @@ public class SnakeController {
 
 	private Board board;
 
-	private List <Snake> snakes;
+	private List<Snake> snakes;
 
-	public SnakeController(Board board){
-        this.board = board;
-        snakes = board.getSnakes();
-    }
+	public SnakeController(Board board) {
+		this.board = board;
+		snakes = board.getSnakes();
+	}
 
-    public boolean SnakeMove() throws IllegalArgumentException {
+	public boolean SnakeMove() throws IllegalArgumentException {
 
-        return true;
-    }
+		return true;
+	}
 
-    public static int getRondomNumBetweenRange(int min, int max) {
+	public static int getRondomNumBetweenRange(int min, int max) {
 
-    	int x = (int) ((Math.random()*((max - min)+1)) + min);
+		int x = (int) ((Math.random() * ((max - min) + 1)) + min);
 
-    	return x;
-    }
+		return x;
+	}
 
+	public Snake selectSnakeToMove() {
+		int snakeCount = board.getSnakeCounts();
 
-    public Snake selectSnakeToMove() {
-    	int snakeCount = board.getSnakeCounts();
+		int snakeNo = getRondomNumBetweenRange(0, snakeCount - 1);
 
-    	int snakeNo = getRondomNumBetweenRange(0, snakeCount - 1);
+		return snakes.get(snakeNo);
+	}
 
+	public void moveall() throws snakeMoveException {
 
-    	return snakes.get(snakeNo);
-    }
+		for (Snake s : snakes) {
+			snakeRandomMove(s);
+		}
 
+	}
 
-    public void moveall() throws snakeMoveException{
+	public void snakeRandomMove(Snake s) throws snakeMoveException {
 
-    	for(Snake s: snakes){
-    		snakeRandomMove(s);
-    	}
+		try {
 
-    }
+			int head = s.getTop();
+			int tail = s.getBottom();
+			int length = head - tail;
+			int y = head % 10; // Column;
+			int x = head / 10; // row;
+			Direction direction = null;
 
+			// set for validate snake head
+			HashSet<Integer> bannedPositions = new HashSet<Integer>();
+			bannedPositions = board.getCriticalPosition();
+			bannedPositions.remove(head);
 
+			// set for validate snake tail
+			HashSet<Integer> headPositions = new HashSet<Integer>();
+			for (Snake i : snakes) {
+				headPositions.add(i.getTop());
+			}
+			headPositions.remove(head);
 
+			HashSet<Integer> snakeGuardPositions = new HashSet<Integer>();
+			for (SnakeGuard i : board.getSnakeGuard()) {
+				snakeGuardPositions.add(i.getPosition());
+			}
 
-    public void snakeRandomMove(Snake s) throws snakeMoveException {
+			while (true) {
 
-    	try {
+				// random direction
+				int directionNo = getRondomNumBetweenRange(0, 3);
 
-    		int head = s.getTop();
-        	int tail = s.getBottom();
-        	int length = head - tail;
-        	int y = head % 10; //Column;
-        	int x = head / 10; //row;
-        	Direction direction = null;
+				direction = Direction.values()[directionNo];
 
+				// split head position to 2 digits int;
+				// xy is the pos =====> pos = 10*x + y;
+				int pos = 0;
 
-        	//set for validate snake head
-        	HashSet <Integer> bannedPositions = new HashSet<Integer>();
-        	bannedPositions = board.getCriticalPosition();
-        	bannedPositions.remove(head);
+				if ((y != 0) && (y != 1)) {
 
+					switch (direction) {
 
-        	//set for validate snake tail
-        	HashSet <Integer> headPositions = new HashSet<Integer>();
-        	for(Snake i : snakes) {
-        		headPositions.add(i.getTop());
-        	}
-        	headPositions.remove(head);
+					case topLeft:
+						pos = 10 * (x + 1) + (10 - y);
 
-        	HashSet <Integer> snakeGuardPositions = new HashSet<Integer>();
-        	for(SnakeGuard i: board.getSnakeGuard()){
-        		snakeGuardPositions.add(i.getPosition());
-        	}
+						break;
+					case topRight:
+						pos = 10 * (x + 1) + (10 - y) + 2;
 
-        	while(true) {
+						break;
+					case bottomLeft:
+						pos = x * 10 - y;
 
-        		//random direction
-            	int directionNo = getRondomNumBetweenRange(0, 3);
+						break;
+					case bottomRight:
+						pos = x * 10 - y + 2;
 
-            	direction = Direction.values()[directionNo];
+						break;
+					}
 
-            	//split head position to 2 digits int;
-            	// xy is the pos =====> pos = 10*x + y;
-            	int pos = 0;
+				} else if (y == 0) {
 
+					switch (direction) {
 
-            	if ((y != 0) && (y != 1)) {
+					case topLeft:
+						pos = head + 2;
 
-            		switch (direction) {
+						break;
+					case topRight:
+						pos = head + 2;
 
-                	case topLeft:
-                		pos = 10 * (x + 1) + (10 - y);
+						break;
+					case bottomLeft:
+						pos = head - 18;
 
-                		break;
-                	case topRight:
-                		pos = 10 * (x + 1) + (10 - y) + 2;
+						break;
+					case bottomRight:
+						pos = head - 18;
 
-                		break;
-                	case bottomLeft:
-                		pos = x * 10 - y;
+						break;
+					}
 
-                		break;
-                	case bottomRight:
-                		pos = x * 10 - y + 2;
+				} else {
 
-                		break;
-                	}
+					switch (direction) {
 
-        		} else if (y == 0){
+					case topLeft:
+						pos = head + 18;
 
-        			switch (direction) {
+						break;
+					case topRight:
+						pos = head + 18;
 
-                	case topLeft:
-                		pos = head + 2;
+						break;
+					case bottomLeft:
+						pos = head - 2;
 
-                		break;
-                	case topRight:
-                		pos = head + 2;
+						break;
+					case bottomRight:
+						pos = head - 2;
 
-                		break;
-                	case bottomLeft:
-                		pos = head - 18;
+						break;
+					}
 
-                		break;
-                	case bottomRight:
-                		pos = head - 18;
+				}
 
-                		break;
-                	}
+				int tailPos = pos - length;
 
-
-        		} else {
-
-        			switch (direction) {
-
-                	case topLeft:
-                		pos = head + 18;
-
-                		break;
-                	case topRight:
-                		pos = head + 18;
-
-                		break;
-                	case bottomLeft:
-                		pos = head - 2;
-
-                		break;
-                	case bottomRight:
-                		pos = head - 2;
-
-                		break;
-                	}
-
-        		}
-
-
-            	int tailPos = pos - length;
-
-            	if (pos>=100|| pos<=1||tailPos<=1||tailPos>=100) {
+				if (pos >= 100 || pos <= 1 || tailPos <= 1 || tailPos >= 100) {
 					continue;
-				} else if (bannedPositions.contains(pos)){
+				} else if (bannedPositions.contains(pos)) {
 
-    				throw new snakeMoveException("Entity overlaps");
+					throw new snakeMoveException("Entity overlaps");
 
-    			} else if (headPositions.contains(tailPos)){
-    				throw new snakeMoveException("Entity overlaps");
+				} else if (headPositions.contains(tailPos)) {
+					throw new snakeMoveException("Entity overlaps");
 
-    			} else if (snakeGuardPositions.contains(tailPos)){
-    				throw new snakeMoveException("Entity overlaps");
-    			} else{
-    				board.setSnake(head, pos);
-    	    		break;
-    			}
+				} else if (snakeGuardPositions.contains(tailPos)) {
+					throw new snakeMoveException("Entity overlaps");
+				} else {
+					board.setSnake(head, pos);
+					break;
+				}
 
-
-        	}
-
+			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 
-
-
-
-    }
-
+	}
 
 }

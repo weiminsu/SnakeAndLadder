@@ -2,7 +2,7 @@ package model;
 
 import java.io.Serializable;
 
-public abstract class Entity  implements Serializable{
+public abstract class Entity implements Serializable {
 	/**
 	 *
 	 */
@@ -10,7 +10,12 @@ public abstract class Entity  implements Serializable{
 	protected int bottom;
 	protected int top;
 
-	public int getBottom() { return bottom; }
-	public int getTop() { return top; }
+	public int getBottom() {
+		return bottom;
+	}
+
+	public int getTop() {
+		return top;
+	}
 
 }

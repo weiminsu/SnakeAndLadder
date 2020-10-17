@@ -23,7 +23,7 @@ public class HumanController {
     private UIWrapper uiWrapper;
 
 
-    public HumanController(Board board){
+	public HumanController(Board board){
         this.board = board;
         uiWrapper =  new UIWrapper(board);
         pieces = board.getPiece();
