@@ -188,6 +188,7 @@ public class GameMain implements UserInput  {
 			stage = 3;
 		} else {
 			uiWrapper.showInfoMessage("Sorry you lost!");
+			end();
 		}
 
 
@@ -222,9 +223,6 @@ public class GameMain implements UserInput  {
     	laddersave.close();
     	snakegardsave.close();
     	snakesave.close();
-
-
-
 	}
 
 
@@ -270,17 +268,14 @@ public class GameMain implements UserInput  {
 
 
 
-				humanController.stage3validatePieceLcations();
+				if (humanController.stage3validatePieceLcations() == false) {
+					uiWrapper.showInfoMessage("Sorry! you lost!");
+					end();
+				};
 
 				if (board.getSnakeCounts() == 0) {
 					uiWrapper.showInfoMessage("Conguatraltion! you win!");
-					ObjectOutputStream snakegardsave = new ObjectOutputStream(new FileOutputStream("snakegard.ser"));
-			    	ObjectOutputStream snakesave = new ObjectOutputStream(new FileOutputStream("snake.ser"));
-			    	ObjectOutputStream piecesave = new ObjectOutputStream(new FileOutputStream("piece.ser"));
-			    	ObjectOutputStream laddersave = new ObjectOutputStream(new FileOutputStream("ladder.ser"));
-			    	ObjectOutputStream roundsave = new ObjectOutputStream(new FileOutputStream("rounds.ser"));
-			    	ObjectOutputStream stagesave = new ObjectOutputStream(new FileOutputStream("stage.ser"));
-					System.exit(0);
+					end();
 				}
 
 			}
@@ -293,6 +288,22 @@ public class GameMain implements UserInput  {
 		}
 
     }
+
+	public void end() throws FileNotFoundException, IOException{
+		ObjectOutputStream snakegardsave = new ObjectOutputStream(new FileOutputStream("snakegard.ser"));
+    	ObjectOutputStream snakesave = new ObjectOutputStream(new FileOutputStream("snake.ser"));
+    	ObjectOutputStream piecesave = new ObjectOutputStream(new FileOutputStream("piece.ser"));
+    	ObjectOutputStream laddersave = new ObjectOutputStream(new FileOutputStream("ladder.ser"));
+    	ObjectOutputStream roundsave = new ObjectOutputStream(new FileOutputStream("rounds.ser"));
+    	ObjectOutputStream stagesave = new ObjectOutputStream(new FileOutputStream("stage.ser"));
+    	roundsave.close();
+    	stagesave.close();
+    	piecesave.close();
+    	laddersave.close();
+    	snakegardsave.close();
+    	snakesave.close();
+    	System.exit(0);
+	}
 
 
     // A method to print a message and to read an int value in the range specified

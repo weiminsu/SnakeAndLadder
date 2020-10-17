@@ -183,7 +183,7 @@ public class HumanController {
     }
 
     //Stage 3 validation;
-    public void stage3validatePieceLcations(){
+    public boolean stage3validatePieceLcations(){
 
 
     	List <Snake> gonnaremove = new ArrayList<Snake>();
@@ -196,14 +196,14 @@ public class HumanController {
 				}
 
     			if (i.getPosition() == j.getTop()) {
-    				uiWrapper.showInfoMessage("Sorry, you lost!");
-    				System.exit(0);
+    				return false;
 				}
     		}
     	}
     	snakes.removeAll(gonnaremove);
 
     	board.repaint();
+    	return true;
 
     }
 
