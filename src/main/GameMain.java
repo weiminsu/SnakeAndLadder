@@ -402,9 +402,5 @@ public class GameMain implements UserInput  {
 		}
 
 
-
-
-
-
     }
 }
